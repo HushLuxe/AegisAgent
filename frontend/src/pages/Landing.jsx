@@ -14,7 +14,7 @@ const Landing = () => {
         </div>
         <div className="status-ticker mono">
           <div className="status-item"><span>●</span> SYSTEM: ONLINE</div>
-          <div className="status-item"><span>●</span> ANALYSIS: EVERY 2H</div>
+          <div className="status-item"><span>●</span> ANALYSIS: REAL-TIME</div>
           <div className="status-item"><span>●</span> CELO CHAIN: 19 TOKENS</div>
         </div>
       </header>
@@ -48,7 +48,7 @@ const Landing = () => {
             </div>
             <div className="t-line"><span className="cmd">$</span> <span className="out">aegis run</span> <span className="val">forensic_engine_v5.1</span></div>
                 <div className="t-line"><span className="out">→ Loading watchlist... 19 tokens · Celo chain</span></div>
-                <div className="t-line"><span className="out">→ Fetching onchain data [Celo Explorer / Sentinel Nodes]</span></div>
+                <div className="t-line"><span className="out">→ Fetching onchain data [Celo Explorer / RPC Interface]</span></div>
                 <div className="t-line"><span className="out">→ Computing metrics: SAI / TFA / LFI / LCR / BPI</span></div>
                 <div className="t-line"><span className="warn">⚠️ CONVERGENCE DETECTED — LFI=0.88 → FRAGILITY_ZONE</span></div>
                 <div className="t-line"><span className="out">→ Sentinel LLM synthesis... EN report generated</span></div>
