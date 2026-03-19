@@ -24,7 +24,7 @@ const Header = () => {
           <div className="logo-box">Δ</div>
           <div>
             <div style={{ fontWeight: 800, fontSize: '18px', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>AegisAgent</div>
-          <div className="mono" style={{ fontSize: '9px', color: 'var(--text-dim)', letterSpacing: '0.05em' }}>SOVEREIGN INTELLIGENCE UNIT</div>
+          <div className="mono" style={{ fontSize: '9px', color: 'var(--text-dim)', letterSpacing: '0.05em' }}>TACTICAL FORENSIC INTELLIGENCE</div>
           </div>
         </Link>
       </div>

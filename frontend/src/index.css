@@ -107,6 +107,7 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
   border-right: 1px solid var(--border);
 }
 
@@ -140,15 +141,16 @@ header {
 .cta-group { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
 
 .btn-primary {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 14px 32px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 12px 32px;
   background: var(--accent); color: var(--bg);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-size: 11px; font-weight: 800;
+  letter-spacing: 0.1em; text-transform: uppercase;
   text-decoration: none; border: none; cursor: pointer;
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
-  transition: background 0.15s, transform 0.15s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  line-height: 1;
 }
 .btn-primary:hover { background: #00bcd4; transform: translateX(2px); }
 

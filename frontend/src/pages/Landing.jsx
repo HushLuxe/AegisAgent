@@ -9,7 +9,7 @@ const Landing = () => {
           <div className="logo-box">Δ</div>
           <div>
             <div style={{ fontWeight: 800, fontSize: '16px', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>AegisAgent</div>
-            <div className="mono" style={{ fontSize: '9px', color: 'var(--text-dim)' }}>SOVEREIGN INTELLIGENCE UNIT</div>
+            <div className="mono" style={{ fontSize: '9px', color: 'var(--text-dim)' }}>TACTICAL FORENSIC INTELLIGENCE</div>
           </div>
         </div>
         <div className="status-ticker mono">
@@ -27,11 +27,10 @@ const Landing = () => {
             <span className="dim">FORENSIC</span><br />
             AGENT
           </h1>
-          <p>
-            Autonomous crypto surveillance on Celo. Tokens monitored
-            continuously — every 2 hours, AI agents compute <strong>100+ forensic metrics</strong>,
-            detect wallet patterns, and score each token with a
-            <strong>Sovereign Anomaly Index</strong>.
+          <p className="hero-desc">
+            Autonomous crypto surveillance on Celo. Tokens monitored 
+            continuously — every 1 hour, AI agents compute <strong>100+ forensic metrics</strong>, 
+            detect wallet patterns, and score each token with a <strong>Sovereign Anomaly Index</strong>.
           </p>
           <div className="cta-group">
             <Link to="/dashboard" className="btn-primary">Access Dashboard →</Link>
@@ -48,10 +47,10 @@ const Landing = () => {
             </div>
             <div className="t-line"><span className="cmd">$</span> <span className="out">aegis run</span> <span className="val">forensic_engine_v5.1</span></div>
                 <div className="t-line"><span className="out">→ Loading watchlist... 19 tokens · Celo chain</span></div>
-                <div className="t-line"><span className="out">→ Fetching onchain data [Celo Explorer / RPC Interface]</span></div>
+                <div className="t-line"><span className="out">→ Fetching onchain data [Celo Explorer / DexScreener]</span></div>
                 <div className="t-line"><span className="out">→ Computing metrics: SAI / TFA / LFI / LCR / BPI</span></div>
                 <div className="t-line"><span className="warn">⚠️ CONVERGENCE DETECTED — LFI=0.88 → FRAGILITY_ZONE</span></div>
-                <div className="t-line"><span className="out">→ Sentinel LLM synthesis... EN report generated</span></div>
+                <div className="t-line"><span className="out">→ Forensic LLM synthesis... EN report generated</span></div>
                 <div className="t-line"><span className="out">→ Pushing memory.json to Sovereign KV</span></div>
             <div className="t-line"><span className="out">→ Telegram:</span> <span className="val">3 alerts dispatched ✓</span></div>
             <div className="t-line"><span className="cmd">$</span> <span className="cursor"></span></div>
@@ -62,7 +61,7 @@ const Landing = () => {
                 <div className="stat-val">100+</div>
                 <div className="stat-key">Metrics</div>
               </div>
-            <div className="stat-cell"><div className="stat-val">2H</div><div className="stat-key">Cycle</div></div>
+            <div className="stat-cell"><div className="stat-val">1H</div><div className="stat-key">Cycle</div></div>
             <div className="stat-cell"><div className="stat-val">x402</div><div className="stat-key">Paywall</div></div>
           </div>
         </div>
@@ -75,19 +74,19 @@ const Landing = () => {
         </div>
         <div className="metrics-grid">
           <div className="m-card">
-            <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>FHS</div>
-            <div className="metric-full" style={{ fontWeight: 700, fontSize: '13px', marginBottom: '8px' }}>Forensic Health Score</div>
-            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Composite score aggregating all signals. Weights liquidity, flow quality, holder distribution and technical momentum.</div>
+            <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>SAI</div>
+            <div className="metric-full" style={{ fontWeight: 700, fontSize: '13px', marginBottom: '8px' }}>Sovereign Anomaly Index</div>
+            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Composite score aggregating all signals. Weights liquidity, flow quality, holder distribution and technical momentum for a surgical-grade risk score.</div>
           </div>
           <div className="m-card">
-            <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>NBP</div>
-            <div className="metric-full" style={{ fontWeight: 700, fontSize: '13px', marginBottom: '8px' }}>Net Buying Pressure</div>
-            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>24h delta between buy and sell flows, normalized by volume. Detects accumulation vs distribution.</div>
+            <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>TFA</div>
+            <div className="metric-full" style={{ fontWeight: 700, fontSize: '13px', marginBottom: '8px' }}>Tactical Flow Analysis</div>
+            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>24h delta between buy and sell flows, normalized by volume. Detects accumulation vs distribution patterns with institutional precision.</div>
           </div>
           <div className="m-card">
-            <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>ICR</div>
-            <div className="metric-full" style={{ fontWeight: 700, fontSize: '13px', marginBottom: '8px' }}>Impact Crash Risk</div>
-            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Estimated price drop if top holder exits. Computed from liquidity depth vs top wallet size.</div>
+            <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>LFI</div>
+            <div className="metric-full" style={{ fontWeight: 700, fontSize: '13px', marginBottom: '8px' }}>Liquidity Fragility Index</div>
+            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Estimated price drop if top holder exits. Computed from liquidity depth vs top wallet size to identify sudden rug risk.</div>
           </div>
           <div className="m-card">
             <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>WCC</div>
@@ -109,7 +108,7 @@ const Landing = () => {
               TOKEN<br/>DASHBOARD
             </h2>
             <p style={{ fontSize: '14px', color: 'var(--text-dim)', lineHeight: 1.7, marginBottom: '28px' }}>
-              FHS scores always visible. Full per-token analysis — 65 metrics, ICR breakdown, LLM narrative — unlocked with a single micropayment.
+              SAI scores always visible. Full per-token analysis — 100+ metrics, LFI breakdown, LLM narrative — unlocked with a single micropayment.
             </p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '28px' }}>
               <span className="paywall-price" style={{ fontSize: '52px' }}>$0.02</span>
@@ -123,7 +122,7 @@ const Landing = () => {
               GLOBAL<br/>SYNTHESIS
             </h2>
             <p style={{ fontSize: '14px', color: 'var(--text-dim)', lineHeight: 1.7, marginBottom: '28px' }}>
-              Every 1 hour, requests analysis across all Celo sentinel tokens. Full **Groq AI** forensic narrative generated autonomously.
+              Every 1 hour, requests analysis across all monitored Celo tokens. Full **Groq AI** forensic narrative generated autonomously.
             </p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '28px' }}>
               <span className="paywall-price" style={{ fontSize: '52px', color: 'var(--amber)' }}>0.1</span>
@@ -134,8 +133,8 @@ const Landing = () => {
       </div>
 
       <footer style={{ padding: '24px 64px', borderTop: '1px solid var(--border)', background: 'var(--surface)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px', color: 'var(--text-ghost)', fontFamily: "'JetBrains Mono', monospace" }}>
-        <div>AegisAgent · <span style={{ color: 'var(--accent)' }}>SOVEREIGN INTELLIGENCE UNIT</span> · Celo Chain</div>
-        <div>BUILT FOR CELO HACKATHON · xSENTINEL v1.0</div>
+        <div>AegisAgent · <span style={{ color: 'var(--accent)' }}>TACTICAL FORENSIC INTELLIGENCE</span> · Celo Chain</div>
+        <div>BUILT FOR CELO HACKATHON · v1.2</div>
         <div>© 2026 · <span style={{ color: 'var(--accent)' }}>ALL SCANS AUTOMATED</span></div>
       </footer>
     </>
