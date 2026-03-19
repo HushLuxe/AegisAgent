@@ -44,10 +44,52 @@ Intelligence is protected by a bespoke, high-fidelity implementation of the **x4
 
 ---
 
-## 🛠️ System Deployment
+## 📡 [Surgical API] Sovereignty-Grade Intelligence
+The AegisAgent's intelligence is accessible via a high-performance REST API, documented with Swagger-grade precision.
 
-### Frontend (Intelligence Dashboard)
-Built with React + Vite + Tailwind CSS for a high-fidelity "terminal" aesthetic.
+### `GET /api/forensics`
+Returns the current forensic snapshot of all monitored assets on the Celo L2 network.
+
+**Response Schema (`application/json`)**
+```json
+{
+  "timestamp": "ISO-8601 String",
+  "tokens": {
+    "TOKEN_ADDRESS": {
+      "symbol": "string",
+      "fhs": "float [0.0 - 10.0]",
+      "phase": "ENUM [ACCUMULATION, RUPTURE, DISTRIBUTION]",
+      "nbp": "float (Net Buy Pressure %)",
+      "icr": "float (Impact Crash Risk)",
+      "lcr": "float (Liquidity Cover %)",
+      "narrative": {
+        "insight": "string (Sovereign AI Assessment)",
+        "structure": "string (Technical Pattern Analysis)"
+      }
+    }
+  }
+}
+```
+
+---
+
+## 🛠️ [Integration] Deployment Intelligence
+AegisAgent is a cloud-native autonomous intelligence system.
+
+### 1. Production Deployment
+To apply environment variables and trigger a production build:
+```bash
+vercel --prod
+```
+> [!TIP]
+> Use `vercel --prod --force` if you need to bypass the build cache for a complete fresh start.
+
+### 2. Vercel KV Integration (Memory Persistence)
+1.  Navigate to your [Vercel Dashboard](https://vercel.com/dashboard).
+2.  Select the `0xdelta-hub` project.
+3.  Click the **Storage** tab.
+4.  Select **Create Database** -> **KV (Redis)**.
+5.  Once created, click **Connect Project** to automatically inject `KV_URL` and `KV_TOKEN`.
 ```bash
 cd frontend
 npm install
