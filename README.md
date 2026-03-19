@@ -72,5 +72,5 @@ python3 backend/agent.py
 The project is built around the **AegisAgent Cyan (#00E5FF)** design system — representing a crisp, surgical, and tech-sharp approach to crypto forensics. By removing the "human-in-the-loop," AegisAgent provides unbiased, data-driven security for the Celo ecosystem.
 
 ---
-*Created by Mary Jane for the Celo Buildathon 2026. All intelligence is processed autonomously.*
+*Fully autonomous forensic intelligence. Built for the Celo L2 Ecosystem (11142220).*
 # AegisAgent-
