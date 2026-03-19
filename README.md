@@ -37,7 +37,9 @@ AegisAgent doesn't just wait for you to visit; it **pushes intelligence**.
 Intelligence is protected by a bespoke, high-fidelity implementation of the **x402 Autonomous Micropayment Pattern**:
 - **Bespoke SDK**: A custom sovereign contract `AegisAgent.sol` manages decentralized access control.
 - **Network**: Celo L2 Sepolia (Chain ID `11142220`)
-- **Contract Address**: `0x74B24d2cd92046772674bFf9B85c11cFd2b9C3d2`
+- **⛓️ Contract**: `0x74B24d2cd92046772674bFf9B85c11cFd2b9C3d2` (Celo L2 Sepolia)
+- **💠 AgentID**: `65` (ERC-8004)
+- **🌐 Live App**: [frontend-beta-three-51.vercel.app](https://frontend-beta-three-51.vercel.app)
 - **Model**: Users pay a micro-subscription (0.1 CELO-S) directly to the agent's contract to gain 24-hour access.
 
 ---
@@ -72,5 +74,4 @@ python3 backend/agent.py
 The project is built around the **AegisAgent Cyan (#00E5FF)** design system — representing a crisp, surgical, and tech-sharp approach to crypto forensics. By removing the "human-in-the-loop," AegisAgent provides unbiased, data-driven security for the Celo ecosystem.
 
 ---
-*Fully autonomous forensic intelligence. Built for the Celo L2 Ecosystem (11142220).*
-# AegisAgent-
+*Fully autonomous forensic intelligence. Built for the Celo L2 Ecosystem (11142220).* 
