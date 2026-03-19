@@ -9,7 +9,7 @@ const Landing = () => {
           <div className="logo-box">Δ</div>
           <div>
             <div style={{ fontWeight: 800, fontSize: '16px', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>AegisAgent</div>
-            <div className="mono" style={{ fontSize: '9px', color: 'var(--text-dim)' }}>FIELD INTELLIGENCE UNIT</div>
+            <div className="mono" style={{ fontSize: '9px', color: 'var(--text-dim)' }}>SOVEREIGN INTELLIGENCE UNIT</div>
           </div>
         </div>
         <div className="status-ticker mono">
@@ -27,11 +27,11 @@ const Landing = () => {
             <span className="dim">FORENSIC</span><br />
             AGENT
           </h1>
-          <p className="hero-desc">
-            <strong>Autonomous crypto surveillance</strong> on Celo.
-            Tokens monitored continuously — every 2 hours, AI agents compute
-            <strong> 65+ forensic metrics</strong>, detect wallet patterns, and
-            score each token with a Forensic Health Score.
+          <p>
+            Autonomous crypto surveillance on Celo. Tokens monitored
+            continuously — every 2 hours, AI agents compute <strong>100+ forensic metrics</strong>,
+            detect wallet patterns, and score each token with a
+            <strong>Sovereign Anomaly Index</strong>.
           </p>
           <div className="cta-group">
             <Link to="/dashboard" className="btn-primary">Access Dashboard →</Link>
@@ -47,18 +47,21 @@ const Landing = () => {
               <span className="t-label">aegis-agent · forensic_engine_v5.1</span>
             </div>
             <div className="t-line"><span className="cmd">$</span> <span className="out">aegis run</span> <span className="val">forensic_engine_v5.1</span></div>
-            <div className="t-line"><span className="out">→ Loading watchlist...</span> <span className="val">19 tokens · Celo chain</span></div>
-            <div className="t-line"><span className="out">→ Fetching onchain data</span> <span className="val">[Celo Explorer / DexScreener]</span></div>
-            <div className="t-line"><span className="out">→ Computing metrics:</span> <span className="val">FHS / NBP / ICR / LCR / BPI</span></div>
-            <div className="t-line"><span className="warn">⚠ ANTIHUNTER — ICR=1.76 → CRASH_RISK detected</span></div>
-            <div className="t-line"><span className="out">→ Venice LLM synthesis... </span><span className="val">EN report generated</span></div>
-            <div className="t-line"><span className="out">→ Pushing memory.json → GitHub Pages</span></div>
+                <div className="t-line"><span className="out">→ Loading watchlist... 19 tokens · Celo chain</span></div>
+                <div className="t-line"><span className="out">→ Fetching onchain data [Celo Explorer / Sentinel Nodes]</span></div>
+                <div className="t-line"><span className="out">→ Computing metrics: SAI / TFA / LFI / LCR / BPI</span></div>
+                <div className="t-line"><span className="warn">⚠️ CONVERGENCE DETECTED — LFI=0.88 → FRAGILITY_ZONE</span></div>
+                <div className="t-line"><span className="out">→ Sentinel LLM synthesis... EN report generated</span></div>
+                <div className="t-line"><span className="out">→ Pushing memory.json to Sovereign KV</span></div>
             <div className="t-line"><span className="out">→ Telegram:</span> <span className="val">3 alerts dispatched ✓</span></div>
             <div className="t-line"><span className="cmd">$</span> <span className="cursor"></span></div>
           </div>
           <div className="stats-strip">
             <div className="stat-cell"><div className="stat-val">19</div><div className="stat-key">Tokens</div></div>
-            <div className="stat-cell"><div className="stat-val">65+</div><div className="stat-key">Metrics</div></div>
+              <div className="stat-cell">
+                <div className="stat-val">100+</div>
+                <div className="stat-key">Metrics</div>
+              </div>
             <div className="stat-cell"><div className="stat-val">2H</div><div className="stat-key">Cycle</div></div>
             <div className="stat-cell"><div className="stat-val">x402</div><div className="stat-key">Paywall</div></div>
           </div>
@@ -131,8 +134,8 @@ const Landing = () => {
       </div>
 
       <footer style={{ padding: '24px 64px', borderTop: '1px solid var(--border)', background: 'var(--surface)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px', color: 'var(--text-ghost)', fontFamily: "'JetBrains Mono', monospace" }}>
-        <div>AegisAgent · <span style={{ color: 'var(--accent)' }}>FIELD INTELLIGENCE UNIT</span> · Celo Chain</div>
-        <div>BUILT FOR CELO HACKATHON V2 · x402</div>
+        <div>AegisAgent · <span style={{ color: 'var(--accent)' }}>SOVEREIGN INTELLIGENCE UNIT</span> · Celo Chain</div>
+        <div>BUILT FOR CELO HACKATHON · xSENTINEL v1.0</div>
         <div>© 2026 · <span style={{ color: 'var(--accent)' }}>ALL SCANS AUTOMATED</span></div>
       </footer>
     </>

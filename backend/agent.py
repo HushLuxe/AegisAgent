@@ -35,7 +35,7 @@ class AegisAgent:
         # 1. Collect on-chain data for Celo ecosystem tokens
         self.run_step("collector.py")
         
-        # 2. Run forensic metric computations (FHS, NBP, etc)
+        # 2. Run forensic metric computations (SAI, TFA, etc)
         self.run_step("report_builder.py")
         
         # 4. Send autonomous alerts for high-priority signals (Rupture/Risk)

@@ -43,10 +43,10 @@ def build_synthesis_json(current, analysis, seal_hash=None, tx_hash=None):
         token_list.append({
             "symbol": t.get("symbol", addr[:8]),
             "address": addr,
-            "fhs": conv.get("fhs", 0),
+            "sai": conv.get("sai", 0),
             "ces": conv.get("ces", 0),
             "phase": conv.get("phase", ""),
-            "nbp": t.get("flows", {}).get("nbp", 0),
+            "tfa": t.get("flows", {}).get("tfa", 0),
             "bpi": t.get("bull_flag", {}).get("bpi", 0)
         })
     synthesis = {

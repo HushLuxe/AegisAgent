@@ -24,7 +24,7 @@ def load_latest_report():
         return json.load(f)
 
 def build_history(symbol, address):
-    """Reconstruit l'historique FHS/NBP/ICR sur les 24 derniers rapports."""
+    """Reconstruit l'historique SAI/TFA/LFI sur les 24 derniers rapports."""
     files = sorted(PROCESSED_DIR.glob("forensic_*.json"))[-24:]
     history = []
     for f in files:
@@ -40,10 +40,10 @@ def build_history(symbol, address):
                 ts = data.get("timestamp", "")[:16].replace("T", " ").replace("-", "-")[5:]
                 history.append({
                     "ts":    ts,
-                    "fhs":   token.get("convergence", {}).get("fhs", 0),
+                    "sai":   token.get("convergence", {}).get("sai", 0),
                     "phase": token.get("convergence", {}).get("phase", "?")[:4],
-                    "nbp":   f"{token.get('flows', {}).get('nbp', 0):.0f}%",
-                    "icr":   round(token.get("liquidity", {}).get("icr", 0), 2),
+                    "tfa":   f"{token.get('flows', {}).get('tfa', 0):.0f}%",
+                    "lfi":   round(token.get("liquidity", {}).get("lfi", 0), 2),
                     "flow":  token.get("flows", {}).get("flow_classification", "?")[:4],
                 })
         except Exception as e:
@@ -70,14 +70,14 @@ def transform_token(address, t):
         "chain":   t.get("chain", "base"),
 
         # Convergence
-        "fhs":   conv.get("fhs", 0),
-        "fhs_label": conv.get("fhs_label", ""),
+        "sai":   conv.get("sai", 0),
+        "sai_label": conv.get("sai_label", ""),
         "phase": conv.get("phase", "UNKNOWN"),
         "cp":    conv.get("cp", 0),
 
         # Liquidité
-        "icr":               liq.get("icr", 0),
-        "icr_alert":         liq.get("icr_alert", False),
+        "lfi":               liq.get("lfi", 0),
+        "lfi_alert":         liq.get("lfi_alert", False),
         "lcr":               liq.get("lcr", 0),
         "lcr_fragile":       liq.get("lcr_fragile", False),
         "lvr":               liq.get("lvr", 0),
@@ -90,8 +90,8 @@ def transform_token(address, t):
         "ips_100k":          liq.get("ips_100k", 0),
 
         # Flows
-        "nbp":               flows.get("nbp", 0),
-        "nbp_status":        flows.get("nbp_status", ""),
+        "tfa":               flows.get("tfa", 0),
+        "tfa_status":        flows.get("tfa_status", ""),
         "ev":                flows.get("ev", 0),
         "ev_trend":          flows.get("ev_trend", ""),
         "ac":                flows.get("ac", 0),
@@ -169,12 +169,12 @@ def run():
         try:
             token = transform_token(address, t)
             tokens.append(token)
-            print(f"  {token['symbol']:12} FHS={token['fhs']} phase={token['phase']} top20={len(token['top20_holders'])} rsi={token['rsi_1h']}")
+            print(f"  {token['symbol']:12} SAI={token['sai']} phase={token['phase']} top20={len(token['top20_holders'])} rsi={token['rsi_1h']}")
         except Exception as e:
             print(f"[WARN] {address[:8]}: {e}")
 
-    # Trier par FHS décroissant
-    tokens.sort(key=lambda x: x.get("fhs", 0), reverse=True)
+    # Trier par SAI décroissant
+    tokens.sort(key=lambda x: x.get("sai", 0), reverse=True)
 
     out = {
         "updated_at": report.get("generated_at", datetime.utcnow().isoformat()),

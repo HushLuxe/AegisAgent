@@ -53,13 +53,13 @@ def extract_market_data(report):
             "fdv": float(pool.get("fdv", 0)),
             "buys_24h": int(pool.get("txns", {}).get("h24", {}).get("buys", 0)),
             "sells_24h": int(pool.get("txns", {}).get("h24", {}).get("sells", 0)),
-            "fhs": conv.get("fhs", 0),
+            "sai": conv.get("sai", 0),
             "phase": conv.get("phase", ""),
-            "nbp": flows.get("nbp", 0),
+            "tfa": flows.get("tfa", 0),
             "bpi": bf.get("bpi", 0),
             "bull_flag_detected": bf.get("detected", False),
             "flag_class": bf.get("flag_class", 0),
-            "icr": liq.get("icr", 0),
+            "lfi": liq.get("lfi", 0),
             "lcr": liq.get("lcr", 0),
             "dai": liq.get("dai", 0),
         }
@@ -82,10 +82,10 @@ def compute_deltas(current_snap, previous_snap):
             "price_delta_pct": round(((curr_price - prev_price) / prev_price * 100) if prev_price else 0, 2),
             "volume_delta_pct": round(((curr_vol - prev_vol) / prev_vol * 100) if prev_vol else 0, 2),
             "liquidity_delta_pct": round(((curr_liq - prev_liq) / prev_liq * 100) if prev_liq else 0, 2),
-            "fhs_delta": round(curr.get("fhs", 0) - prev.get("fhs", 0), 1),
-            "nbp_delta": round(curr.get("nbp", 0) - prev.get("nbp", 0), 1),
+            "sai_delta": round(curr.get("sai", 0) - prev.get("sai", 0), 1),
+            "tfa_delta": round(curr.get("tfa", 0) - prev.get("tfa", 0), 1),
             "bpi_delta": round(curr.get("bpi", 0) - prev.get("bpi", 0), 3),
-            "icr_delta": round(curr.get("icr", 0) - prev.get("icr", 0), 2),
+            "lfi_delta": round(curr.get("lfi", 0) - prev.get("lfi", 0), 2),
             "phase_changed": curr.get("phase", "") != prev.get("phase", ""),
             "prev_phase": prev.get("phase", ""),
             "bull_flag_new": curr.get("bull_flag_detected", False) and not prev.get("bull_flag_detected", False),
@@ -94,7 +94,7 @@ def compute_deltas(current_snap, previous_snap):
     return deltas
 
 def load_top_memories(current_snap, top_n=5):
-    sorted_tokens = sorted(current_snap.items(), key=lambda x: x[1].get("fhs", 0), reverse=True)
+    sorted_tokens = sorted(current_snap.items(), key=lambda x: x[1].get("sai", 0), reverse=True)
     memories = {}
     for symbol, data in sorted_tokens[:top_n]:
         matches = list(MEMORY_DIR.glob(f"{symbol}_*.md"))
@@ -123,9 +123,9 @@ def load_decisions():
 
 def build_tracker_prompt(current_snap, deltas, memories, prev_signals, decisions):
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    market_lines = ["| Token | Price | \u03942h | \u039424h | Vol 24h | \u0394Vol | Liq | MCap | FHS | Phase |"]
+    market_lines = ["| Token | Price | \u03942h | \u039424h | Vol 24h | \u0394Vol | Liq | MCap | SAI | Phase |"]
     market_lines.append("|-------|-------|-----|------|---------|------|-----|------|-----|-------|")
-    for symbol, data in sorted(current_snap.items(), key=lambda x: x[1].get("fhs", 0), reverse=True):
+    for symbol, data in sorted(current_snap.items(), key=lambda x: x[1].get("sai", 0), reverse=True):
         d = deltas.get(symbol, {})
         price = data.get("price_usd", 0)
         price_str = f"${price:.2f}" if price >= 1 else f"${price:.6f}" if price < 0.01 else f"${price:.4f}"
@@ -135,7 +135,7 @@ def build_tracker_prompt(current_snap, deltas, memories, prev_signals, decisions
         liq_str = f"${liq/1000:.0f}K" if liq >= 1000 else f"${liq:.0f}"
         mcap = data.get("mcap", 0)
         mcap_str = f"${mcap/1e6:.1f}M" if mcap >= 1e6 else f"${mcap/1000:.0f}K"
-        market_lines.append(f"| {symbol} | {price_str} | {d.get('price_delta_pct',0):+.1f}% | {data.get('change_24h',0):+.1f}% | {vol_str} | {d.get('volume_delta_pct',0):+.0f}% | {liq_str} | {mcap_str} | {data.get('fhs',0):.1f} | {data.get('phase','')[:5]} |")
+        market_lines.append(f"| {symbol} | {price_str} | {d.get('price_delta_pct',0):+.1f}% | {data.get('change_24h',0):+.1f}% | {vol_str} | {d.get('volume_delta_pct',0):+.0f}% | {liq_str} | {mcap_str} | {data.get('sai',0):.1f} | {data.get('phase','')[:5]} |")
     market_table = "\n".join(market_lines)
     delta_lines = []
     for symbol, d in deltas.items():
@@ -143,8 +143,8 @@ def build_tracker_prompt(current_snap, deltas, memories, prev_signals, decisions
         changes = []
         if abs(d.get("price_delta_pct", 0)) > 2: changes.append(f"Price {d['price_delta_pct']:+.1f}%")
         if abs(d.get("volume_delta_pct", 0)) > 20: changes.append(f"Vol {d['volume_delta_pct']:+.0f}%")
-        if abs(d.get("fhs_delta", 0)) >= 0.5: changes.append(f"FHS {d['fhs_delta']:+.1f}")
-        if abs(d.get("nbp_delta", 0)) > 10: changes.append(f"NBP {d['nbp_delta']:+.0f}")
+        if abs(d.get("sai_delta", 0)) >= 0.5: changes.append(f"SAI {d['sai_delta']:+.1f}")
+        if abs(d.get("tfa_delta", 0)) > 10: changes.append(f"TFA {d['tfa_delta']:+.0f}")
         if d.get("phase_changed"): changes.append(f"Phase: {d['prev_phase']} \u2192 {current_snap[symbol]['phase']}")
         if d.get("bull_flag_new"): changes.append("\ud83d\udea9 NEW BULL FLAG")
         if d.get("bull_flag_lost"): changes.append("\u274c BULL FLAG LOST")
@@ -194,7 +194,7 @@ Generate a Signal Evolution Report:
 ```json
 [{{"symbol": "TOKEN", "type": "SIGNAL_TYPE", "status": "STATUS", "since": "timestamp", "note": "explanation"}}]
 ```
-Types: SAC, BULL_FLAG, ICR_CRITICAL, DISTRIBUTION, VPD_ABSORPTION, VPD_EXHAUSTION, PHASE_CHANGE, WHALE_MOVE
+Types: SAC, BULL_FLAG, LFI_CRITICAL, DISTRIBUTION, VPD_ABSORPTION, VPD_EXHAUSTION, PHASE_CHANGE, WHALE_MOVE
 ### 6. KEY INSIGHT (one sentence)"""
 
 def call_groq(prompt, data_payload):
@@ -235,7 +235,7 @@ def main():
     print(f"\ud83d\udce1 Previous signals: {len(prev_signals.get('signals', []))}")
     decisions = load_decisions()
     prompt = build_tracker_prompt(current_snap, deltas, memories, prev_signals, decisions)
-    data_payload = {"current_metrics": {s: {k: v for k, v in d.items() if k in ['fhs','phase','nbp','bpi','icr','dai','bull_flag_detected']} for s, d in current_snap.items()}, "deltas": deltas}
+    data_payload = {"current_metrics": {s: {k: v for k, v in d.items() if k in ['sai','phase','tfa','bpi','lfi','dai','bull_flag_detected']} for s, d in current_snap.items()}, "deltas": deltas}
     print("🤖 Calling Groq AI (Signal Tracker)...")
     response = call_groq(prompt, data_payload)
     if response:

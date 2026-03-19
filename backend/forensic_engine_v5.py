@@ -22,8 +22,8 @@ from collections import Counter
 class LiquidityAudit:
     """Step 1: Liquidity Audit & Stress Test"""
     crash_threshold_usd: float = 0.0
-    icr: float = 0.0
-    icr_alert: bool = False
+    lfi: float = 0.0
+    lfi_alert: bool = False
     lcr: float = 0.0
     lcr_fragile: bool = False
     lvr: float = 0.0
@@ -38,8 +38,8 @@ class LiquidityAudit:
 @dataclass
 class FlowAnalysis:
     """Step 2: Flow Detection & VPA"""
-    nbp: float = 0.0
-    nbp_status: str = "neutral"
+    tfa: float = 0.0
+    tfa_status: str = "neutral"
     ev: float = 0.0
     ev_trend: str = "stable"
     ac: float = 0.0
@@ -98,8 +98,8 @@ class ForensicCluster:
 @dataclass
 class ConvergenceScore:
     """Step 6: Global Convergence Scoring"""
-    fhs: float = 0.0
-    fhs_label: str = "unknown"
+    sai: float = 0.0
+    sai_label: str = "unknown"
     cp: float = 0.0
     phase: str = "UNKNOWN"
 
@@ -262,11 +262,11 @@ class ForensicEngineV5:
         if liquidity > 0:
             liq.crash_threshold_usd = (0.3 / 0.7) * (liquidity / 2)
         
-        # ICR - Index de Concentration Relative
+        # LFI - Index de Concentration Relative
         sum_top5 = sum(top5_balances)
         if liq.crash_threshold_usd > 0:
-            liq.icr = sum_top5 / liq.crash_threshold_usd
-        liq.icr_alert = liq.icr > 1.0
+            liq.lfi = sum_top5 / liq.crash_threshold_usd
+        liq.lfi_alert = liq.lfi > 1.0
         
         # LCR - Liquidity Coverage Ratio
         if fdv > 0:
@@ -309,16 +309,16 @@ class ForensicEngineV5:
         # ────────────────────────────────────────────
         fl = report.flows
         
-        # NBP - Net Buyer Pressure (from transaction counts)
+        # TFA - Net Buyer Pressure (from transaction counts)
         if total_txns > 0:
-            fl.nbp = ((buys - sells) / total_txns) * 100
+            fl.tfa = ((buys - sells) / total_txns) * 100
         
-        if fl.nbp > 15:
-            fl.nbp_status = "accumulation"
-        elif fl.nbp < -15:
-            fl.nbp_status = "distribution"
+        if fl.tfa > 15:
+            fl.tfa_status = "accumulation"
+        elif fl.tfa < -15:
+            fl.tfa_status = "distribution"
         else:
-            fl.nbp_status = "neutral"
+            fl.tfa_status = "neutral"
         
         # EV - Volume Efficiency
         if volume_24h > 0:
@@ -329,9 +329,9 @@ class ForensicEngineV5:
             fl.ac = volume_24h / abs(price_change_24h)
         
         # Flow classification
-        if fl.nbp > 10 and abs(price_change_24h) < 5:
+        if fl.tfa > 10 and abs(price_change_24h) < 5:
             fl.flow_classification = "ACCUMULATION"
-        elif fl.nbp < -10:
+        elif fl.tfa < -10:
             fl.flow_classification = "DISTRIBUTION"
         elif volume_24h > 0 and abs(price_change_24h) < 2:
             fl.flow_classification = "CHURNING"
@@ -481,36 +481,36 @@ class ForensicEngineV5:
         conv = report.convergence
         
         # Normalize components to 0-1
-        icr_norm = min(liq.icr / 3.0, 1.0) if liq.icr > 0 else 0
+        lfi_norm = min(liq.lfi / 3.0, 1.0) if liq.lfi > 0 else 0
         ev_norm = min(fl.ev / 10.0, 1.0) if fl.ev > 0 else 0
         fqs_norm = min(bf.fqs / 200.0, 1.0) if bf.fqs > 0 else 0.5
         wcc_pct = fc.wcc / 100.0
         lcr_norm = min(liq.lcr / 10.0, 1.0) if liq.lcr > 0 else 0
         bpi_norm = min(bf.bpi / 3.0, 1.0) if bf.bpi > 0 else 0.5
         
-        # FHS - Forensic Health Score (/10)
-        fhs_raw = (
-            (1 - icr_norm) * 0.25 +
+        # SAI - Forensic Health Score (/10)
+        sai_raw = (
+            (1 - lfi_norm) * 0.25 +
             ev_norm * 0.20 +
             fqs_norm * 0.20 +
             (1 - wcc_pct) * 0.15 +
             lcr_norm * 0.10 +
             bpi_norm * 0.10
         )
-        conv.fhs = round(fhs_raw * 10, 1)
+        conv.sai = round(sai_raw * 10, 1)
         
-        if conv.fhs > 7:
-            conv.fhs_label = "solid"
-        elif conv.fhs > 4:
-            conv.fhs_label = "moderate"
+        if conv.sai > 7:
+            conv.sai_label = "solid"
+        elif conv.sai > 4:
+            conv.sai_label = "moderate"
         else:
-            conv.fhs_label = "critical"
+            conv.sai_label = "critical"
         
         # CP - Continuation Probability
-        cp_raw = (fqs_norm + bpi_norm + (fl.nbp / 100.0 + 0.5)) / 3.0 * 100
+        cp_raw = (fqs_norm + bpi_norm + (fl.tfa / 100.0 + 0.5)) / 3.0 * 100
         if rsi_1h and rsi_1h < 70 and ta.si > 60:
             cp_raw += 15
-        if liq.icr > 1.5:
+        if liq.lfi > 1.5:
             cp_raw -= 20
         conv.cp = round(max(0, min(100, cp_raw)), 1)
         
@@ -531,17 +531,17 @@ class ForensicEngineV5:
         # ────────────────────────────────────────────
         alerts = []
         
-        if liq.icr > 1.5:
+        if liq.lfi > 1.5:
             alerts.append({
                 "severity": "critical",
-                "code": "ICR_HIGH",
-                "message": f"⚠️ Top holder peut crash >30%. Seuil: ${liq.crash_threshold_usd:,.0f}. ICR={liq.icr:.2f}"
+                "code": "LFI_HIGH",
+                "message": f"⚠️ Top holder peut crash >30%. Seuil: ${liq.crash_threshold_usd:,.0f}. LFI={liq.lfi:.2f}"
             })
-        elif liq.icr > 1.0:
+        elif liq.lfi > 1.0:
             alerts.append({
                 "severity": "warning",
-                "code": "ICR_ELEVATED",
-                "message": f"⚠️ Concentration élevée. ICR={liq.icr:.2f}"
+                "code": "LFI_ELEVATED",
+                "message": f"⚠️ Concentration élevée. LFI={liq.lfi:.2f}"
             })
         
         if fc.wcc > 25 and fc.tci > 30:
@@ -847,15 +847,15 @@ class ForensicEngineV5:
         
         if phase == "ACCUMULATION":
             parts = [f"Phase: ACCUMULATION"]
-            if fl.nbp > 0:
-                parts.append(f"✅ NBP +{fl.nbp:.0f}% (High pressure)")
+            if fl.tfa > 0:
+                parts.append(f"✅ TFA +{fl.tfa:.0f}% (High pressure)")
             parts.append(f"→ Institutional-grade accumulation")
             return " | ".join(parts)
         
         elif phase == "DISTRIBUTION":
             parts = [f"Phase: DISTRIBUTION"]
-            if fl.nbp < 0:
-                parts.append(f"🔴 NBP {fl.nbp:.0f}% (High distribution)")
+            if fl.tfa < 0:
+                parts.append(f"🔴 TFA {fl.tfa:.0f}% (High distribution)")
             parts.append(f"→ Active asset unloading")
             return " | ".join(parts)
         
@@ -863,21 +863,21 @@ class ForensicEngineV5:
             return f"Phase: RUPTURE | BPI {r.bull_flag.bpi:.2f} | Imminent Breakout probability"
         
         else:
-            return f"Phase: {phase} | NBP {fl.nbp:+.0f}% | Volatility {fl.ev:.2f}"
+            return f"Phase: {phase} | TFA {fl.tfa:+.0f}% | Volatility {fl.ev:.2f}"
     
     def _build_insight(self, r: ForensicReportV5, price: float, mcap: float, liq: float) -> str:
-        fhs = r.convergence.fhs
+        sai = r.convergence.sai
         cp = r.convergence.cp
         
-        if fhs > 7 and cp > 60:
-            return (f"💎 Robust ecosystem structure (FHS {fhs}/10). "
-                    f"CP {cp:.0f}%. Coverage {r.liquidity.lcr:.1f}%, ICR {r.liquidity.icr:.2f}.")
-        elif fhs < 4:
+        if sai > 7 and cp > 60:
+            return (f"💎 Robust ecosystem structure (SAI {sai}/10). "
+                    f"CP {cp:.0f}%. Coverage {r.liquidity.lcr:.1f}%, LFI {r.liquidity.lfi:.2f}.")
+        elif sai < 4:
             alert_type = "Clustering" if r.forensic.wcc_alert else "Liquidity"
-            return (f"⚠️ Critical Anomaly (FHS {fhs}/10). "
-                    f"Identified {alert_type} risk. ICR {r.liquidity.icr:.2f}. CP {cp:.0f}%.")
+            return (f"⚠️ Critical Anomaly (SAI {sai}/10). "
+                    f"Identified {alert_type} risk. LFI {r.liquidity.lfi:.2f}. CP {cp:.0f}%.")
         else:
-            return (f"⚪ Neutral Sentiment (FHS {fhs}/10). "
+            return (f"⚪ Neutral Sentiment (SAI {sai}/10). "
                     f"CP {cp:.0f}%. Autonomous surveillance active.")
     
     def _build_structure_narrative(self, r: ForensicReportV5) -> str:
@@ -912,10 +912,10 @@ if __name__ == "__main__":
                 print(f"\n{'='*60}")
                 print(f"Token: {report.symbol} ({report.token_address[:10]}...)")
                 print(f"Phase: {report.convergence.phase}")
-                print(f"FHS: {report.convergence.fhs}/10 ({report.convergence.fhs_label})")
+                print(f"SAI: {report.convergence.sai}/10 ({report.convergence.sai_label})")
                 print(f"CP: {report.convergence.cp}%")
-                print(f"ICR: {report.liquidity.icr:.2f}")
-                print(f"NBP: {report.flows.nbp:.1f}%")
+                print(f"LFI: {report.liquidity.lfi:.2f}")
+                print(f"TFA: {report.flows.tfa:.1f}%")
                 print(f"Bull Flag: {report.bull_flag.detected} (BPI: {report.bull_flag.bpi:.2f})")
                 print(f"Alerts: {len(report.alerts)}")
                 for alert in report.alerts:

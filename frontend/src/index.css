@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
-  --bg: #050505;
+  --bg: #050507;
   --surface: #0a0a0c;
-  --border: #1a1a1e;
-  --border-bright: #2a2a30;
-  --accent: #00E5FF;
-  --amber: #ff8c00;
-  --text-main: #f0f0f0;
-  --text-dim: #66666e;
-  --text-ghost: #333338;
-  --red: #ff3e3e;
-  --blue: #0070ff;
-  --yellow: #ffb800;
+  --surface-raised: #111114;
+  --border: #1a1a1f;
+  --accent: #00E5FF; /* Aegis Cyan */
+  --accent-dim: rgba(0, 229, 255, 0.1);
+  --risk: #ff4466;
+  --amber: #FFD600; /* Solar Amber */
+  --text-main: #ffffff;
+  --text-dim: #a0a0ab;
+  --text-ghost: #52525b;
+  --font-mono: 'JetBrains Mono', 'Roboto Mono', monospace;
   --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
@@ -189,6 +189,18 @@ header {
 }
 .stat-cell { background: var(--bg); padding: 16px; text-align: center; }
 .stat-val { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: var(--accent); }
+/* SAI Index Classes */
+.sai-high { color: var(--accent); text-shadow: 0 0 10px rgba(0, 245, 155, 0.4); }
+.sai-medium { color: var(--amber); }
+.sai-low { color: var(--risk); }
+
+/* LFI Fragility Classes */
+.lfi-critical { color: var(--risk); animation: pulse-risk 2s infinite; }
+@keyframes pulse-risk {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
 .stat-key { font-size: 9px; color: var(--text-ghost); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
 
 /* MAIN GRID (DASHBOARD) */

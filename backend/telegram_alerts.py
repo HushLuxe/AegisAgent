@@ -47,18 +47,18 @@ def check_for_alerts():
 
     for t in tokens:
         symbol = t.get("symbol", "UNT")
-        fhs = t.get("fhs", 0)
+        sai = t.get("sai", 0)
         phase = t.get("phase", "STABLE")
         rsi = t.get("rsi_1h", 50)
         
         # 1. Breakout Alert (Aegis RUPTURE)
-        if fhs >= 9.0:
-            msg = f"🛡️ *AegisAgent RUPTURE DETECTED*\n\n🔥 *${symbol}* is showing extreme breakout momentum!\n📈 FHS Score: {fhs}/10\n📊 Phase: {phase}\n\n[View Dashboard](http://localhost:5173/dashboard)"
+        if sai >= 9.0:
+            msg = f"🛡️ *AegisAgent RUPTURE DETECTED*\n\n🔥 *${symbol}* is showing extreme breakout momentum!\n📈 SAI Score: {sai}/10\n📊 Phase: {phase}\n\n[View Dashboard](http://localhost:5173/dashboard)"
             alerts_triggered.append(msg)
             
         # 2. Risk Alert (High Volatility/Risk)
-        elif fhs <= 2.5 and fhs > 0:
-            msg = f"⚠️ *AegisAgent RISK WARNING*\n\n📉 *${symbol}* is showing high fragility cluster!\n📉 FHS Score: {fhs}/10\n📊 Status: HIGH RISK\n\n[Analyze on Celo L2](http://localhost:5173/dashboard)"
+        elif sai <= 2.5 and sai > 0:
+            msg = f"⚠️ *AegisAgent RISK WARNING*\n\n📉 *${symbol}* is showing high fragility cluster!\n📉 SAI Score: {sai}/10\n📊 Status: HIGH RISK\n\n[Analyze on Celo L2](http://localhost:5173/dashboard)"
             alerts_triggered.append(msg)
 
     if alerts_triggered:

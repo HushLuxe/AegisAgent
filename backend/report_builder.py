@@ -13,19 +13,19 @@ def publish_forensic_digest(results):
     MOLTBOOK_URL = "https://www.moltbook.com/api/v1/posts"
     
     # Construction du tableau synthétique
-    header = "| Token | FHS | Phase | BPI | NBP |\n|---|---|---|---|---|\n"
+    header = "| Token | SAI | Phase | BPI | TFA |\n|---|---|---|---|---|\n"
     rows = []
     
-    # Trier par FHS décroissant
-    sorted_tokens = sorted(results["tokens"].values(), key=lambda x: x["convergence"]["fhs"], reverse=True)
+    # Trier par SAI décroissant
+    sorted_tokens = sorted(results["tokens"].values(), key=lambda x: x["convergence"]["sai"], reverse=True)
     
     for t in sorted_tokens[:10]: # Top 10 pour la lisibilité
         symbol = t["symbol"]
-        fhs = t["convergence"]["fhs"]
+        sai = t["convergence"]["sai"]
         phase = t["convergence"]["phase"]
         bpi = round(t["bull_flag"]["bpi"], 2)
-        nbp = round(t["flows"]["nbp"], 1)
-        rows.append(f"| {symbol} | {fhs} | {phase} | {bpi} | {nbp}% |")
+        tfa = round(t["flows"]["tfa"], 1)
+        rows.append(f"| {symbol} | {sai} | {phase} | {bpi} | {tfa}% |")
     
     content = f"🛡️ **AegisAgent Forensic Assessment — {datetime.now(timezone.utc).strftime('%H:%M UTC')}**\n\n"
     content += header + "\n".join(rows)
@@ -100,7 +100,7 @@ def main():
         }
         
         results["tokens"][addr] = report_dict
-        print(f"  ✅ {report.symbol}: FHS={report.convergence.fhs}/10, Phase={report.convergence.phase}")
+        print(f"  ✅ {report.symbol}: SAI={report.convergence.sai}/10, Phase={report.convergence.phase}")
     
     timestamp_str = latest.replace("snapshot_", "").replace(".json", "")
     output_file = os.path.join(processed_dir, f"forensic_{timestamp_str}.json")

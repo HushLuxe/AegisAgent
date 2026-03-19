@@ -25,12 +25,23 @@ const phaseColor = (phase = '') => {
   return 'var(--text-dim)';
 };
 
+const getSAIClass = (sai) => {
+  if (sai >= 8) return 'sai-high'; // Example class for high SAI
+  if (sai >= 5) return 'sai-medium'; // Example class for medium SAI
+  return 'sai-low'; // Example class for low SAI
+};
+
 // ── Dashboard ─────────────────────────────────────────────────────────────────
 const Dashboard = () => {
   const [tokens, setTokens] = useState([]);
   const [selected, setSelected] = useState(null);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [status, setStatus] = useState('');
+  const [stats, setStats] = useState({
+    total_tokens: 0,
+    avg_sai: 0,
+    risk_alerts: 0
+  });
   const [wallet, setWallet] = useState(null);
   const [updatedAt, setUpdatedAt] = useState('');
 
@@ -314,6 +325,12 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="m-card">
+                <div className="m-label">LFI Fragility</div>
+                <div className="m-val" style={{ color: t.lfi > 0.5 ? '#ff4466' : 'var(--accent)' }}>
+                  {(t.lfi * 100).toFixed(1)}%
+                </div>
+              </div>
+              <div className="m-card">
                 <div className="m-label">Impact Crash Risk</div>
                 <div className="m-val" style={{ color: t.icr > 1.0 ? '#ff4466' : 'var(--accent)' }}>
                   {fmt(t.icr)}
@@ -333,6 +350,12 @@ const Dashboard = () => {
                 <div className="m-label">Bull Flag</div>
                 <div className="m-val" style={{ color: t.bull_flag ? 'var(--accent)' : 'var(--text-ghost)' }}>
                   {t.bull_flag ? `✓ Class ${t.bf_class}` : 'None'}
+                </div>
+              </div>
+              <div className="m-card">
+                <div className="m-label">SAI Index</div>
+                <div className={`m-val ${getSAIClass(t.sai)}`}>
+                  {t.sai?.toFixed(1) || '0.0'}
                 </div>
               </div>
               <div className="m-card">
