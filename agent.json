@@ -1,0 +1,25 @@
+{
+  "name": "AegisAgent",
+  "description": "Autonomous forensic intelligence agent on Celo L2 network",
+  "version": "1.0.0-Hackathon",
+  "operatorWallet": "0xE32A943635107CA464a2c1328EFf34AE0bFa8247",
+  "erc8004": {
+    "agentId": 66,
+    "chain": "celo-sepolia",
+    "contract": "0x74B24d2cd92046772674bFf9B85c11cFd2b9C3d2"
+  },
+  "techStack": {
+    "runtime": "Python 3.11 / Next.js",
+    "orchestration": "Vercel Serverless + Cron",
+    "llm": "LLaMA 3.3 (via Groq)",
+    "storage": "Vercel KV (Redis)",
+    "frontend": "React + Tailwind (Vercel)",
+    "forensics": "Aegis Surgical Engine V5"
+  },
+  "capabilities": [
+    "on-chain-forensics",
+    "risk-clustering",
+    "autonomous-alerts",
+    "x402-subscriptions"
+  ]
+}
