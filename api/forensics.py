@@ -3,6 +3,7 @@ import json
 import requests
 from datetime import datetime, timezone
 import time
+import concurrent.futures
 from upstash_redis import Redis
 
 # Import relative path trick for Vercel
@@ -93,11 +94,20 @@ def handler(request):
     engine = ForensicEngineV5()
     results = {}
     
-    for address in TOKENS:
+    def process_token(address):
         data = fetch_data(address)
         report = engine.analyze(data)
-        results[address] = report.to_dict()
-        time.sleep(1) # Courtesy delay
+        return address, report.to_dict()
+
+    # Process all tokens concurrently to stay under Vercel's 10s timeout limit
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(TOKENS)) as executor:
+        future_to_addr = {executor.submit(process_token, addr): addr for addr in TOKENS}
+        for future in concurrent.futures.as_completed(future_to_addr):
+            try:
+                addr, report_dict = future.result()
+                results[addr] = report_dict
+            except Exception as e:
+                print(f"Error processing token {future_to_addr[future]}: {e}")
 
     final_payload = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
