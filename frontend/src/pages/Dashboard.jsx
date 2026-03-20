@@ -49,7 +49,10 @@ const Dashboard = () => {
   useEffect(() => {
     const load = () => {
       fetch('/api/forensics?t=' + Date.now())
-        .then(r => r.json())
+        .then(r => {
+          if (!r.ok) throw new Error('API Error');
+          return r.json();
+        })
         .then(data => {
           // The API returns { tokens: { addr: report } }
           // We convert it to a list for the dashboard
@@ -58,7 +61,19 @@ const Dashboard = () => {
           setUpdatedAt(data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : '');
           if (!selected && list.length) setSelected(list[0]);
         })
-        .catch(() => console.warn('Aegis API not yet online. Fallback to cached state.'));
+        .catch(() => {
+          console.warn('Aegis API not yet online. Fallback to cached state.');
+          fetch('/memory.json?t=' + Date.now())
+            .then(res => res.json())
+            .then(fallbackData => {
+              if (fallbackData.tokens) {
+                setTokens(fallbackData.tokens);
+                setUpdatedAt(fallbackData.updated_at ? new Date(fallbackData.updated_at).toLocaleTimeString() : '');
+                if (!selected && fallbackData.tokens.length) setSelected(fallbackData.tokens[0]);
+              }
+            })
+            .catch(e => console.error('Fallback failed', e));
+        });
     };
     load();
     const iv = setInterval(load, 120_000);
