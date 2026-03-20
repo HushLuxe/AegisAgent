@@ -21,19 +21,20 @@ const Landing = () => {
 
       <div className="hero">
         <div className="hero-left">
-          <div className="eyebrow">On-chain forensic intelligence</div>
+          <div className="eyebrow">Autonomous On-Chain Forensic Intelligence · Celo L2</div>
           <h1 className="hero-title">
             <span className="accent">AEGIS</span><br />
             <span className="dim">FORENSIC</span><br />
             AGENT
           </h1>
           <p className="hero-desc">
-            Autonomous crypto surveillance on Celo. Tokens monitored 
-            continuously — every 1 hour, AI agents compute <strong>100+ forensic metrics</strong>, 
-            detect wallet patterns, and score each token with a <strong>Sovereign Anomaly Index</strong>.
+            AegisAgent is a sovereign AI system conducting continuous forensic surveillance of the Celo ecosystem.
+            Every 60 minutes, the engine autonomously ingests on-chain data and computes <strong>100+ proprietary metrics</strong> —
+            liquidity depth, flow quality, holder concentration, and structural momentum — condensed into a single
+            <strong> Sovereign Anomaly Index (SAI)</strong> per token.
           </p>
           <div className="cta-group">
-            <Link to="/dashboard" className="btn-primary">Access Dashboard →</Link>
+            <Link to="/dashboard" className="btn-primary">Access Intelligence Feed →</Link>
           </div>
         </div>
 
@@ -76,22 +77,22 @@ const Landing = () => {
           <div className="m-card">
             <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>SAI</div>
             <div className="metric-full" style={{ fontWeight: 700, fontSize: '13px', marginBottom: '8px' }}>Sovereign Anomaly Index</div>
-            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Composite score aggregating all signals. Weights liquidity, flow quality, holder distribution and technical momentum for a surgical-grade risk score.</div>
+             <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Weighted composite score (0–10) integrating liquidity depth, directional flow, holder concentration, and structural momentum. The primary risk-adjusted output of each forensic cycle.</div>
           </div>
           <div className="m-card">
             <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>TFA</div>
             <div className="metric-full" style={{ fontWeight: 700, fontSize: '13px', marginBottom: '8px' }}>Tactical Flow Analysis</div>
-            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>24h delta between buy and sell flows, normalized by volume. Detects accumulation vs distribution patterns with institutional precision.</div>
+            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Net buy/sell pressure over a 24h rolling window, normalised against on-chain volume. Distinguishes programmatic accumulation from retail-driven distribution at the transaction level.</div>
           </div>
           <div className="m-card">
             <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>LFI</div>
             <div className="metric-full" style={{ fontWeight: 700, fontSize: '13px', marginBottom: '8px' }}>Liquidity Fragility Index</div>
-            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Estimated price drop if top holder exits. Computed from liquidity depth vs top wallet size to identify sudden rug risk.</div>
+            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Simulated price impact of a top-wallet exit event, derived from live liquidity pool depth. Quantifies systemic fragility with a threshold-based alert at LFI &gt; 0.6.</div>
           </div>
           <div className="m-card">
             <div className="metric-name" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '20px', fontWeight: 700, color: 'var(--accent)' }}>WCC</div>
             <div className="metric-full" style={{ fontWeight: 700, fontSize: '13px', marginBottom: '8px' }}>Whale Concentration Coefficient</div>
-            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Gini-like measure of supply concentration across top 20 wallets. High WCC increases rug risk.</div>
+            <div className="metric-desc" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6 }}>Gini-derived supply concentration ratio across the top 20 on-chain wallets. Elevated WCC (&gt;15%) correlates strongly with coordination risk and asymmetric sell pressure.</div>
           </div>
         </div>
       </section>
@@ -103,26 +104,26 @@ const Landing = () => {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', background: 'var(--border)', border: '1px solid var(--border)' }}>
           <div style={{ background: 'var(--bg)', padding: '40px' }}>
-            <div className="pw-chip">Per-token forensic</div>
+            <div className="pw-chip">Per-Token Forensic Intelligence</div>
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: 800, lineHeight: 0.9, letterSpacing: '-0.04em', textTransform: 'uppercase', marginBottom: '20px' }}>
               TOKEN<br/>DASHBOARD
             </h2>
             <p style={{ fontSize: '14px', color: 'var(--text-dim)', lineHeight: 1.7, marginBottom: '28px' }}>
-              SAI scores always visible. Full per-token analysis — 100+ metrics, LFI breakdown, LLM narrative — unlocked with a single micropayment.
+              Surface-level SAI scores are always public. Full forensic depth — 100+ computed metrics, LFI simulation, whale mapping, bull flag detection, and a Groq-powered AI narrative — unlocked with a single on-chain micropayment on Celo L2.
             </p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '28px' }}>
-              <span className="paywall-price" style={{ fontSize: '52px' }}>$0.02</span>
-              <span style={{ fontSize: '12px', color: 'var(--text-dim)', fontFamily: "'JetBrains Mono', monospace" }}>cUSD / session</span>
+              <span className="paywall-price" style={{ fontSize: '52px' }}>0.1</span>
+              <span style={{ fontSize: '12px', color: 'var(--text-dim)', fontFamily: "'JetBrains Mono', monospace" }}>CELO / 24H ACCESS</span>
             </div>
-            <Link to="/dashboard" className="btn-primary" style={{ padding: '14px 32px' }}>Open Dashboard →</Link>
+            <Link to="/dashboard" className="btn-primary" style={{ padding: '14px 32px' }}>Open Intelligence Feed →</Link>
           </div>
           <div style={{ background: 'var(--bg)', padding: '40px', borderLeft: '1px solid var(--border)' }}>
-            <div className="pw-chip" style={{ borderColor: 'rgba(255,140,0,0.3)', background: 'rgba(255,140,0,0.06)', color: 'var(--amber)' }}>Global synthesis</div>
+            <div className="pw-chip" style={{ borderColor: 'rgba(255,140,0,0.3)', background: 'rgba(255,140,0,0.06)', color: 'var(--amber)' }}>Autonomous Synthesis Engine</div>
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: 800, lineHeight: 0.9, letterSpacing: '-0.04em', textTransform: 'uppercase', marginBottom: '20px' }}>
               GLOBAL<br/>SYNTHESIS
             </h2>
             <p style={{ fontSize: '14px', color: 'var(--text-dim)', lineHeight: 1.7, marginBottom: '28px' }}>
-              Every 1 hour, requests analysis across all monitored Celo tokens. Full **Groq AI** forensic narrative generated autonomously.
+              Every 60 minutes, AegisAgent autonomously ingests live on-chain data for all monitored Celo tokens and invokes a Groq LLM to generate a structured forensic narrative — phase classification, structural risk, and signal confidence — with no human input.
             </p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '28px' }}>
               <span className="paywall-price" style={{ fontSize: '52px', color: 'var(--amber)' }}>0.1</span>
@@ -133,9 +134,9 @@ const Landing = () => {
       </div>
 
       <footer style={{ padding: '24px 64px', borderTop: '1px solid var(--border)', background: 'var(--surface)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px', color: 'var(--text-ghost)', fontFamily: "'JetBrains Mono', monospace" }}>
-        <div>AegisAgent · <span style={{ color: 'var(--accent)' }}>TACTICAL FORENSIC INTELLIGENCE</span> · Celo Chain</div>
-        <div>BUILT FOR CELO HACKATHON · v1.2</div>
-        <div>© 2026 · <span style={{ color: 'var(--accent)' }}>ALL SCANS AUTOMATED</span></div>
+        <div>AegisAgent · <span style={{ color: 'var(--accent)' }}>SOVEREIGN FORENSIC INTELLIGENCE</span> · Celo L2</div>
+        <div>ForensicEngineV5 · Groq LLM · x402 Protocol</div>
+        <div>© 2026 · <span style={{ color: 'var(--accent)' }}>AUTONOMOUS · NON-CUSTODIAL</span></div>
       </footer>
     </>
   );

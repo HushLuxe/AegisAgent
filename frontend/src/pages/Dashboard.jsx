@@ -272,12 +272,12 @@ const Dashboard = () => {
         {!isUnlocked && (
           <div className="paywall-overlay">
             <div className="paywall-card">
-              <div className="pw-chip">Per-token forensic · 0.1 CELO</div>
+              <div className="pw-chip">Per-Token Forensic Intelligence · Celo L2</div>
               <div className="pw-icon" style={{ fontSize: '32px', marginBottom: '20px' }}>🔐</div>
-              <h2>Forensic Intel</h2>
-              <p>Full per-token analysis — unlocked with a single micropayment on Celo.</p>
+              <h2>Intelligence Access</h2>
+              <p>Full forensic depth — 100+ computed metrics, LFI simulation, whale mapping, bull flag detection, and an autonomous Groq AI narrative — unlocked with a single on-chain micropayment.</p>
               <div className="paywall-price">0.1 CELO</div>
-              <div className="paywall-price-sub">Celo L2 Sepolia · 24h Access</div>
+              <div className="paywall-price-sub">Celo L2 Sepolia · 24h Access · Non-Custodial</div>
               <div className="pw-status" style={{
                 color: status.includes('failed') || status.includes('cancel') ? '#ff4466' : 'var(--text-ghost)',
                 marginBottom: '16px'
