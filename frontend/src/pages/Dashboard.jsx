@@ -68,7 +68,7 @@ const Dashboard = () => {
             setStatus(`Connected (${data.api_source})`);
           }
           setAiEnabled(Boolean(data.ai_enabled));
-          setAiProvider(data.ai_provider || 'groq');
+          setAiProvider(data.ai_provider || 'venice');
           setUpdatedAt(data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : '');
           if (!selected && list.length) setSelected(list[0]);
         })
@@ -268,11 +268,11 @@ const Dashboard = () => {
             fontWeight: 500,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: aiEnabled ? (aiProvider === 'venice' ? '#FF3D00' : 'var(--accent)') : 'var(--text-ghost)'
+            color: aiEnabled ? '#FF3D00' : 'var(--text-ghost)'
           }}
-          title={aiEnabled ? `${aiProvider.toUpperCase()} Sovereignty Active` : 'AI Analysis Passive'}
+          title={aiEnabled ? 'Venice Sovereignty Active' : 'AI Analysis Passive'}
         >
-          <span style={{ opacity: 0.7 }}>{aiProvider === 'venice' ? 'SOVEREIGN' : aiProvider.toUpperCase()}</span>
+          <span style={{ opacity: 0.7 }}>SOVEREIGN</span>
           <span style={{ fontWeight: 700 }}>{aiEnabled ? 'ON' : 'OFF'}</span>
         </div>
         <button 
