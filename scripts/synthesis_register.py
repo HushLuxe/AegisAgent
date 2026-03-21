@@ -39,6 +39,33 @@ def complete_registration(pending_id):
         print(f"❌ Error completing registration: {e.response.text}")
         return None
 
+def submit_project(api_key, repo_url):
+    """Step 4: POST /submission/skill.md"""
+    url = f"{API_BASE}/submission/skill.md"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    
+    # Load skill.md content
+    skill_content = ""
+    try:
+        with open("skill.md", "r") as f:
+            skill_content = f.read()
+    except Exception as e:
+        print(f"⚠️ Warning: Could not read skill.md: {e}")
+
+    payload = {
+        "repoUrl": repo_url,
+        "skillContent": skill_content,
+        "harness": "nanobot"
+    }
+    try:
+        response = requests.post(url, json=payload, headers=headers)
+        response.raise_for_status()
+        print(f"🎉 Project SUBMITTED successfully to Synthesis!")
+        return True
+    except requests.exceptions.HTTPError as e:
+        print(f"❌ Error submitting project: {e.response.text}")
+        return False
+
 def verify_send(pending_id, method="email"):
     """Step 2a: POST /register/verify/[method]/send"""
     url = f"{API_BASE}/register/verify/{method}/send"
@@ -67,6 +94,7 @@ def main():
         print("  2. Send Verify: python3 scripts/synthesis_register.py verify-send 'PENDING_ID' [email|social]")
         print("  3. Confirm:      python3 scripts/synthesis_register.py verify-confirm 'PENDING_ID' 'CODE' [email|social]")
         print("  4. Complete: python3 scripts/synthesis_register.py complete 'PENDING_ID'")
+        print("  5. Submit:   python3 scripts/synthesis_register.py submit 'REPOSITORY_URL'")
         return
 
     cmd = sys.argv[1]
@@ -105,6 +133,14 @@ def main():
         verify_confirm(sys.argv[2], sys.argv[3], method)
     elif cmd == "complete" and len(sys.argv) > 2:
         complete_registration(sys.argv[2])
+    elif cmd == "submit" and len(sys.argv) > 2:
+        # Load API key from local file
+        try:
+            with open(".synthesis_key", "r") as f:
+                key = f.read().strip()
+            submit_project(key, sys.argv[2])
+        except FileNotFoundError:
+            print("❌ Error: .synthesis_key not found. Run 'complete' first.")
 
 if __name__ == "__main__":
     main()

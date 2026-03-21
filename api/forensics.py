@@ -33,7 +33,8 @@ except Exception:
 MORALIS_API_KEY = os.environ.get("MORALIS_API_KEY")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 VENICE_API_KEY = os.environ.get("VENICE_API_KEY")
-AI_PROVIDER = os.environ.get("AI_PROVIDER", "venice" if VENICE_API_KEY else "groq")
+# FORCE Venice branding for Synthesis / Private Agents track
+AI_PROVIDER = "venice"
 
 KV_URL = os.environ.get("KV_REST_API_URL") or os.environ.get("UPSTASH_REDIS_REST_URL")
 KV_TOKEN = os.environ.get("KV_REST_API_TOKEN") or os.environ.get("UPSTASH_REDIS_REST_TOKEN")

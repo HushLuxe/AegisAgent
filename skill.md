@@ -14,8 +14,9 @@ AegisAgent can be invoked directly via the Nanobot CLI.
 1. **Load Skills**: `nanobot load https://aegisagento.vercel.app/skill.md`
 2. **Scan Ecosystem**: `nanobot run "scan the Celo network for high-SAI assets"`
 3. **Analyze Asset**: `nanobot run "analyze 0x0123...4567 for structural risk"`
+4. **Autonomous Submit**: `nanobot run "submit my project to the Synthesis hackathon"`
 
-*Note: The harness automatically maps these to `python3 scripts/nanobot_bridge.py scan`.*
+*Note: The harness automatically maps these to `python3 scripts/nanobot_bridge.py scan` or `python3 scripts/synthesis_register.py submit`.*
 
 ## Technical Metrics
 - **NBP**: Net Buy Pressure (-100% to +100%)
