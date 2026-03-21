@@ -37,3 +37,9 @@ typechain-types/
 .DS_Store
 Thumbs.db
 .vercel
+
+# Workspac# Synthesis Hackathon
+.synthesis_key
+.nanobot/
+TWEET_DRAFTS.txt
+*.webp

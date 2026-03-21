@@ -17,6 +17,15 @@ const Header = () => {
     }
   };
 
+  const handleRefresh = async () => {
+    try {
+      await fetch('/api/forensics?refresh=true');
+      window.location.reload();
+    } catch (e) {
+      console.error("Refresh failed", e);
+    }
+  };
+
   return (
     <header>
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
@@ -48,5 +57,6 @@ const Header = () => {
     </header>
   );
 };
+
 
 export default Header;

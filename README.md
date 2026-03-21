@@ -1,15 +1,15 @@
 # 🛡️ AegisAgent
-**Autonomous Sovereign Forensic Intelligence for the Celo L2 Ecosystem**
-
-[![Live Demo](https://img.shields.io/badge/Live-aegisagento.vercel.app-00E5FF?style=for-the-badge)](https://aegisagento.vercel.app)
-[![Celo Sepolia](https://img.shields.io/badge/Chain-Celo%20L2%20Sepolia-FCFF52?style=for-the-badge)](https://explorer.celo.org/sepolia/)
-[![Track](https://img.shields.io/badge/Track-Best%20Agent%20on%20Celo-00E5FF?style=for-the-badge)]()
+> **Autonomous Sovereign Forensic Intelligence for the Celo L2 Ecosystem**
 
 ---
 
-## 🎯 Mission
+[![Live Demo](https://img.shields.io/badge/Live-aegisagento.vercel.app-00E5FF?style=for-the-badge)](https://aegisagento.vercel.app)
+[![Celo L2](https://img.shields.io/badge/Network-Celo%20L2-FCFF52?style=for-the-badge)](https://explorer.celo.org/sepolia/)
+[![Sovereign AI](https://img.shields.io/badge/AI-Venice.ai-FF3D00?style=for-the-badge)](https://venice.ai)
 
-AegisAgent's mission is to make autonomous, institutional-grade on-chain intelligence accessible to every participant in the Celo ecosystem. By running a fully self-sustaining forensic AI agent that continuously monitors token health, detects anomalies, and generates AI-synthesized risk narratives — all gated by a non-custodial micropayment on Celo — we prove that AI agents can operate with genuine economic autonomy, providing real utility without a centralized operator.
+## 🚀 Overview
+
+AegisAgent is a next-generation autonomous forensic agent designed for the Celo ecosystem. It provides institutional-grade on-chain intelligence, detecting liquidity fragility and adversarial patterns through 100+ proprietary metrics. By leveraging **Venice AI**, AegisAgent ensures that all risk narratives are generated with complete privacy and sovereign, permissionless inference.
 
 ---
 
@@ -21,22 +21,23 @@ The Celo ecosystem lacks real-time, autonomous on-chain risk intelligence. Trade
 
 ## ✅ Solution
 
-AegisAgent is a fully autonomous AI forensic agent running natively on Celo L2. Every 60 minutes, it ingests live on-chain data across monitored Celo tokens and computes **100+ proprietary metrics** through **ForensicEngineV5**. A Groq LLM (LLaMA 3.3-70b) synthesizes all signals into a structured forensic narrative with zero human input.
+AegisAgent is a fully autonomous AI forensic agent running natively on Celo L2. Every 60 minutes, it ingests live on-chain data across monitored Celo tokens and computes **100+ proprietary metrics** through **ForensicEngineV5**. A sovereign LLM (Venice.ai / Groq) synthesizes all signals into a structured forensic narrative with zero human input.
+
+By integrating **Venice AI**, AegisAgent prioritizes user privacy and permissionless inference, qualifying for the **Private Agents** track at the Synthesis Hackathon.
 
 Full per-token intelligence is monetized via a **non-custodial x402 micropayment subscription** (0.1 CELO / 24h) enforced by an on-chain smart contract — demonstrating genuine agent-native economic autonomy on Celo.
 
 ---
 
-## 🏛️ Production Status
+## 🏛️ Ecosystem Specs
 
-| | |
+| Component | specification |
 |---|---|
-| **Live Dashboard** | [aegisagento.vercel.app](https://aegisagento.vercel.app) |
-| **Smart Contract** | `0x74B24d2cd92046772674bFf9B85c11cFd2b9C3d2` (Celo L2 Sepolia) |
-| **Agent Wallet** | `0xE32A943635107CA464a2c1328EFf34AE0bFa8247` |
-| **Sentinel ID** | `66` (ERC-8004) |
-| **Infrastructure** | Vercel Serverless + Upstash KV + Celo L2 Cron |
-| **LLM** | LLaMA 3.3-70b via Groq |
+| **Core Engine** | ForensicEngineV5 (Sovereign Metrics) |
+| **Sovereign LLM** | **Venice AI** (Llama 3.3-70b) |
+| **Network** | Celo L2 (Mainnet Optimized) |
+| **Monetization** | x402 Non-custodial Micropayments |
+| **Status** | Production Stable |
 
 ---
 
@@ -59,35 +60,36 @@ Gini-derived supply concentration ratio across the top 20 on-chain wallets. Elev
 
 ---
 
-## 🏆 Milestones
+## 🏆 Capabilities
 
-### Milestone 1 — Core Autonomous Agent & Forensic Engine ✅
-Designed and deployed the full autonomous agent pipeline on Celo L2. Built **ForensicEngineV5** from scratch — a Python computation engine that fetches live on-chain data (liquidity pools, OHLCV, holder distribution) from DexScreener, GeckoTerminal, and Moralis, then computes 100+ proprietary forensic metrics. Deployed the **AegisSubscription smart contract** on Celo Sepolia with non-custodial x402 micropayment paywall (0.1 CELO / 24h). Integrated Groq LLM to autonomously generate structured forensic narratives — phase classification, structural insight, and risk assessment — with no human input.
+### 🔥 Autonomous Intelligence Loop
+AegisAgent operates a fully self-sustaining pipeline. Every cycle, it ingests live on-chain telemetry, computes 100+ proprietary forensic markers, and synthesizes tactical risk narratives via Venice AI.
 
-### Milestone 2 — Live Intelligence Dashboard & Submission-Ready Polish ✅
-Shipped a production-grade React frontend exposing the full forensic feed to users. Dashboard surfaces real-time SAI, LFI, TFA, WCC, RSI, Bull Flag status, and Groq AI narrative — populated from live on-chain data fetched in parallel via `ThreadPoolExecutor` to stay within Vercel serverless limits. Wallet-gated paywall overlay with automatic Celo L2 network switching and on-chain subscription verification. Project is fully deployed, publicly accessible, and submission-ready.
+### 💰 On-Chain Economic Autonomy
+The agent is gated by a non-custodial x402 micropayment subscription contract on Celo L2. Users pay 0.1 CELO for 24h of forensic access, demonstrating genuine agent-native economic sovereignty without centralized intervention.
 
 ---
 
-## 📡 API Reference
+## 📡 API Specification (Swagger-Style)
 
 ### `GET /api/forensics`
-Returns the current forensic snapshot of the Celo ecosystem.
+Returns the active forensic state of the Celo ecosystem.
 
+#### 🟢 Response Schema `200 OK`
 ```json
 {
   "timestamp": "ISO-8601",
-  "network": "Celo",
+  "ai_provider": "venice",
   "tokens": {
     "0x...": {
       "symbol": "string",
-      "sai": "float",
-      "phase": "ENUM: ACCUMULATION | DISTRIBUTION | CONSOLIDATION",
-      "tfa": "float",
-      "lfi": "float",
-      "narrative_phase": "string",
-      "narrative_insight": "string",
-      "alerts": []
+      "sai": 8.5,
+      "phase": "ACCUMULATION",
+      "lfi": 0.04,
+      "narrative": {
+        "insight": "AI-generated risk assessment...",
+        "phase": "Institutional Accumulation"
+      }
     }
   }
 }
@@ -111,7 +113,9 @@ cd frontend && npm install && npm run dev
 ### Environment Variables
 | Variable | Purpose |
 |---|---|
-| `GROQ_API_KEY` | Groq LLM narrative generation |
+| `VENICE_API_KEY` | Venice.ai LLM narrative generation (Privacy-focused) |
+| `GROQ_API_KEY` | Groq LLM fallback |
+| `AI_PROVIDER` | Toggle between `venice` or `groq` |
 | `MORALIS_API_KEY` | On-chain holder analysis |
 | `PRIVATE_KEY` | Celo L2 contract operations |
 | `KV_REST_API_URL` | Upstash Redis persistence |

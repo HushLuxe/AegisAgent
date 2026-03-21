@@ -1,8 +1,10 @@
 import os
 
 # ── API Keys (set via environment variables) ────────────────────────────────
-VENICE_API_KEY    = os.environ.get("VENICE_API_KEY", "")   # optional, kept for reference
-GROQ_API_KEY      = os.environ.get("GROQ_API_KEY", "")     # FREE — get at console.groq.com
+DEXSCREENER_API   = "https://api.dexscreener.com/latest/dex/tokens/"
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+VENICE_API_KEY = os.environ.get("VENICE_API_KEY")
+# Discord Webhook pour OpenClaw Agent
 MORALIS_API_KEY   = os.environ.get("MORALIS_API_KEY", "")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID  = os.environ.get("TELEGRAM_CHAT_ID", "")

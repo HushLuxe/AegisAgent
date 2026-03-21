@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
-import requests
-import json
+from web3 import Web3
+from eth_account import Account
 import hashlib
-import subprocess
-import re
 import os
 import time
 from datetime import datetime, timezone
+import requests
+import json
+import re
+import subprocess
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions"
@@ -15,6 +16,11 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 MOLTBOOK_API_KEY = os.environ.get("MOLTBOOK_API_KEY", "")
 MOLTBOOK_URL = "https://www.moltbook.com/api/v1/posts"
+
+# RPC & Account
+CELO_RPC = "https://alfajores-forno.celo-testnet.org"
+PRIVATE_KEY = os.environ.get("PRIVATE_KEY", "")
+AGENT_WALLET = os.environ.get("AGENT_WALLET", "0xE32A943635107CA464a2c1328EFf34AE0bFa8247")
 
 SYNTHESIS_OUTPUT = "/tmp/aegis-agent/synthesis.json"
 POSITION_FILE = "/tmp/aegis-agent/mind/position.json"
@@ -69,10 +75,36 @@ def check_and_exit_position():
 
 def seal_report_onchain(text):
     report_hash = hashlib.sha256(text.encode()).hexdigest()
-    print(f"[CELO TOOL MOCK] Send 0 CELO to 0x800... on Celo Sepolia with data 0x{report_hash}")
-    # Simulating a tx hash for the hackathon
-    tx_hash = f"0xdeadbeef{report_hash[:32]}"
-    return report_hash, tx_hash
+    
+    if not PRIVATE_KEY:
+        print("⚠️ No PRIVATE_KEY found. Skipping real on-chain seal.")
+        return report_hash, f"mock_hash_{report_hash[:16]}"
+
+    try:
+        w3 = Web3(Web3.HTTPProvider(CELO_RPC))
+        account = Account.from_key(PRIVATE_KEY)
+        
+        # Zero-value transaction to self with the hash in data
+        tx = {
+            'to': account.address,
+            'value': 0,
+            'gas': 100000,
+            'gasPrice': w3.eth.gas_price,
+            'nonce': w3.eth.get_transaction_count(account.address),
+            'data': f"0x{report_hash}",
+            'chainId': 44787 # Celo Sepolia (Alfajores)
+        }
+        
+        signed_tx = w3.eth.account.sign_transaction(tx, PRIVATE_KEY)
+        tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
+        tx_id = w3.to_hex(tx_hash)
+        
+        print(f"🔗 Sealed on Celo: {tx_id}")
+        return report_hash, tx_id
+        
+    except Exception as e:
+        print(f"❌ Failed to seal on Celo: {e}")
+        return report_hash, None
 
 def enter_new_position(text, current_data):
     if os.path.exists(POSITION_FILE):

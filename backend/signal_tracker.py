@@ -3,7 +3,8 @@
 🔄 Signal Evolution Tracker — Step 2b
 ======================================
 Compare cycle N (fresh from report_builder) vs cycle N-1.
-Calls Venice AI to analyze signal evolution, price/volume deltas, and memory trends.
+Compare cycle N (fresh from report_builder) vs cycle N-1.
+Calls Groq AI to analyze signal evolution, price/volume deltas, and memory trends on Celo.
 Outputs signals.json for injection into Step 3 (request_analysis.py).
 """
 

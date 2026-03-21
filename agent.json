@@ -1,6 +1,8 @@
 {
   "name": "AegisAgent",
   "description": "Autonomous forensic intelligence agent on Celo L2 network",
+  "image": "https://aegisagento.vercel.app/logo.svg",
+  "external_url": "https://aegisagento.vercel.app",
   "version": "1.0.0-Hackathon",
   "operatorWallet": "0xE32A943635107CA464a2c1328EFf34AE0bFa8247",
   "erc8004": {
@@ -14,12 +16,15 @@
     "llm": "LLaMA 3.3 (via Groq)",
     "storage": "Vercel KV (Redis)",
     "frontend": "React + Tailwind (Vercel)",
-    "forensics": "Aegis Surgical Engine V5"
+    "forensics": "Aegis Surgical Engine V5",
+    "harness": "nanobot",
+    "model": "llama-3.3-70b-versatile"
   },
   "capabilities": [
     "on-chain-forensics",
     "risk-clustering",
     "autonomous-alerts",
-    "x402-subscriptions"
+    "x402-subscriptions",
+    "on-chain-sealing"
   ]
 }

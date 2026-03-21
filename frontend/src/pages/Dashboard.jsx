@@ -44,25 +44,37 @@ const Dashboard = () => {
   });
   const [wallet, setWallet] = useState(null);
   const [updatedAt, setUpdatedAt] = useState('');
+  const [aiEnabled, setAiEnabled] = useState(false);
+  const [aiProvider, setAiProvider] = useState('groq');
 
   // Fetch forensics from Vercel API on mount and every 2 minutes
   useEffect(() => {
     const load = () => {
       fetch('/api/forensics?t=' + Date.now())
-        .then(r => {
-          if (!r.ok) throw new Error('API Error');
+        .then(async r => {
+          if (!r.ok) {
+            const errBody = await r.text();
+            console.error(`❌ API Error (${r.status}):`, errBody);
+            throw new Error(`API Error ${r.status}`);
+          }
           return r.json();
         })
         .then(data => {
-          // The API returns { tokens: { addr: report } }
-          // We convert it to a list for the dashboard
+          console.log("✅ Aegis API Response:", data);
+          // The API returns { tokens: { addr: report }, api_source: "live/cache" }
           const list = Object.values(data.tokens || {});
           setTokens(list);
+          if (data.api_source) {
+            setStatus(`Connected (${data.api_source})`);
+          }
+          setAiEnabled(Boolean(data.ai_enabled));
+          setAiProvider(data.ai_provider || 'groq');
           setUpdatedAt(data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : '');
           if (!selected && list.length) setSelected(list[0]);
         })
         .catch(() => {
           console.warn('Aegis API not yet online. Fallback to cached state.');
+          setAiEnabled(false);
           fetch('/memory.json?t=' + Date.now())
             .then(res => res.json())
             .then(fallbackData => {
@@ -105,6 +117,14 @@ const Dashboard = () => {
 
   const checkSubscription = async (addr, provider) => {
     if (AEGIS_CONTRACT_ADDRESS === '0x0000000000000000000000000000000000000000') return;
+    
+    // Check local cache first for "one-time" feel
+    const cached = localStorage.getItem(`aegis_unlocked_${addr.toLowerCase()}`);
+    if (cached === 'true') {
+      setIsUnlocked(true);
+      return;
+    }
+
     try {
       const aegis = new ethers.Contract(
         AEGIS_CONTRACT_ADDRESS,
@@ -113,6 +133,9 @@ const Dashboard = () => {
       );
       const active = await aegis.hasActiveSubscription(addr);
       setIsUnlocked(active);
+      if (active) {
+        localStorage.setItem(`aegis_unlocked_${addr.toLowerCase()}`, 'true');
+      }
     } catch (e) { console.error('Error checking sub:', e); }
   };
 
@@ -204,11 +227,53 @@ const Dashboard = () => {
   };
 
   const t = selected;
+  const fhsValue = t?.fhs ?? t?.sai ?? 0;
+  const nbpValue = t?.nbp ?? t?.tfa ?? null;
+  const icrValue = t?.icr ?? t?.ips_50k ?? t?.ips_10k ?? null;
+  const lfiValue = t?.lfi ?? 0;
 
   return (
     <div className="main-grid">
       {/* ── Top Bar Logic (Connect Wallet Button) ── */}
-      <div style={{ position: 'fixed', top: '15px', right: '15px', zIndex: 1000 }}>
+      <div style={{ position: 'fixed', top: '15px', right: '15px', zIndex: 1000, display: 'flex', gap: '8px' }}>
+        <button 
+          className="btn-secondary"
+          style={{ padding: '8px 12px', fontSize: '11px', borderRadius: '4px', cursor: 'pointer' }}
+          title="Force-rebuild backend cache"
+          onClick={async () => {
+            try {
+              setIsLoading(true);
+              await fetch('/api/forensics?refresh=true');
+              window.location.reload();
+            } catch(e) {
+              console.error(e);
+              setIsLoading(false);
+            }
+          }}
+        >
+          REFRESH
+        </button>
+
+        <div
+          className="ai-badge"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 10px',
+            borderRadius: '999px',
+            border: '1px solid var(--border)',
+            background: 'var(--surface)',
+            fontSize: '10px',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: aiEnabled ? 'var(--accent)' : 'var(--text-ghost)'
+          }}
+          title={aiEnabled ? `${aiProvider.toUpperCase()} analysis enabled` : 'AI analysis disabled'}
+        >
+          <span style={{ opacity: 0.7 }}>{aiProvider.toUpperCase()}</span>
+          <span style={{ fontWeight: 700 }}>{aiEnabled ? 'ON' : 'OFF'}</span>
+        </div>
         <button 
           onClick={connectWallet}
           className="btn-primary" 
@@ -231,20 +296,32 @@ const Dashboard = () => {
       <aside className="sidebar">
         <div className="sidebar-label">
           <span>Forensic Assets</span>
-          <span className="mono" style={{ color: 'var(--accent)' }}>{tokens.length}</span>
+          <span className="mono" style={{ color: 'var(--accent)' }}>{isUnlocked ? tokens.length : '??'}</span>
         </div>
-        {updatedAt && (
+        {!isUnlocked && (
+          <div style={{ padding: '24px 16px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px', marginBottom: '12px' }}>🔒</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-ghost)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Surveillance Encrypted
+            </div>
+            <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '8px', lineHeight: 1.4 }}>
+              Payment required to unlock real-time asset tracking.
+            </div>
+          </div>
+        )}
+        {isUnlocked && updatedAt && (
           <div style={{ fontSize: '10px', color: 'var(--text-ghost)', padding: '4px 16px', marginBottom: '4px' }}>
             Updated {updatedAt}
           </div>
         )}
         <div className="token-list">
-          {tokens.length === 0 && (
-            <div style={{ padding: '20px 16px', color: 'var(--text-ghost)', fontSize: '12px' }}>
-              Run <code>python3 backend/agent.py</code> to populate tokens.
+          {isUnlocked && tokens.length === 0 && (
+            <div style={{ padding: '20px 16px', color: 'var(--text-ghost)', fontSize: '11px', textAlign: 'center' }}>
+              AUTONOMOUS SURVEILLANCE ACTIVE<br/>
+              Awaiting next forensic cycle...
             </div>
           )}
-          {tokens.map(tok => (
+          {isUnlocked && tokens.map(tok => (
             <div
               key={tok.address || tok.symbol}
               className={`token-item ${selected?.symbol === tok.symbol ? 'active' : ''}`}
@@ -257,8 +334,8 @@ const Dashboard = () => {
                 </div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div className="token-score" style={{ color: tok.fhs >= 8 ? 'var(--accent)' : 'var(--text-main)' }}>
-                  {fmt(tok.fhs, 1)}
+                <div className="token-score" style={{ color: (tok.fhs ?? tok.sai ?? 0) >= 8 ? 'var(--accent)' : 'var(--text-main)' }}>
+                  {fmt((tok.fhs ?? tok.sai ?? 0), 1)}
                 </div>
                 <div className="token-rsi">RSI: {fmt(tok.rsi_1h, 0)}</div>
               </div>
@@ -301,7 +378,7 @@ const Dashboard = () => {
             <div className="intel-header">
               <div>
                 <div className="intel-title">
-                  <h1 style={{ fontSize: '48px', fontWeight: 800 }}>{t.symbol}</h1>
+                  <h1 style={{ fontSize: '48px', fontWeight: 800 }}>{isUnlocked ? t.symbol : '••••••'}</h1>
                 </div>
                 <div className="addr-pill" title={t.address}>
                   {t.address ? `${t.address.slice(0, 6)}…${t.address.slice(-4)}` : 'Celo'}
@@ -309,23 +386,23 @@ const Dashboard = () => {
               </div>
               <div className="fhs-radar">
                 <div style={{ fontSize: '10px', color: 'var(--text-ghost)', marginBottom: '4px' }}>FHS</div>
-                <div className="fhs-val">{fmt(t.fhs, 1)}</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-ghost)' }}>{t.fhs_label || ''}</div>
+                <div className="fhs-val">{isUnlocked ? fmt(fhsValue, 1) : '—'}</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-ghost)' }}>{isUnlocked ? (t.fhs_label || '') : 'LOCKED'}</div>
               </div>
             </div>
 
             {/* Price row */}
             <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
               {[
-                ['Price', fmtPrice(t.price_usd)],
-                ['24h Δ', t.price_change_24h != null ? `${t.price_change_24h > 0 ? '+' : ''}${fmt(t.price_change_24h)}%` : '—'],
-                ['Vol 24h', fmtK(t.volume_24h)],
-                ['Liq', fmtK(t.liquidity_usd)],
-                ['MCap', fmtK(t.mcap)],
+                ['Price', isUnlocked ? fmtPrice(t.price_usd) : '••••'],
+                ['24h Δ', isUnlocked ? (t.price_change_24h != null ? `${t.price_change_24h > 0 ? '+' : ''}${fmt(t.price_change_24h)}%` : '—') : '••••'],
+                ['Vol 24h', isUnlocked ? fmtK(t.volume_24h) : '••••'],
+                ['Liq', isUnlocked ? fmtK(t.liquidity_usd) : '••••'],
+                ['MCap', isUnlocked ? fmtK(t.mcap) : '••••'],
               ].map(([label, val]) => (
                 <div key={label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: '10px 14px', minWidth: '90px' }}>
                   <div style={{ fontSize: '10px', color: 'var(--text-ghost)', marginBottom: '4px' }}>{label}</div>
-                  <div className="mono" style={{ fontSize: '13px', color: label === '24h Δ' && t.price_change_24h < 0 ? '#ff4466' : 'var(--text-main)' }}>{val}</div>
+                  <div className="mono" style={{ fontSize: '13px', color: isUnlocked && label === '24h Δ' && t.price_change_24h < 0 ? '#ff4466' : 'var(--text-main)' }}>{val}</div>
                 </div>
               ))}
             </div>
@@ -335,20 +412,20 @@ const Dashboard = () => {
             <div className="metrics-grid">
               <div className="m-card">
                 <div className="m-label">Net Buy Pressure</div>
-                <div className="m-val" style={{ color: t.nbp > 0 ? 'var(--accent)' : '#ff4466' }}>
-                  {t.nbp != null ? `${t.nbp > 0 ? '+' : ''}${fmt(t.nbp, 1)}%` : '—'}
+                <div className="m-val" style={{ color: (nbpValue ?? 0) > 0 ? 'var(--accent)' : '#ff4466' }}>
+                  {nbpValue != null ? `${nbpValue > 0 ? '+' : ''}${fmt(nbpValue, 1)}%` : '—'}
                 </div>
               </div>
               <div className="m-card">
                 <div className="m-label">LFI Fragility</div>
-                <div className="m-val" style={{ color: t.lfi > 0.5 ? '#ff4466' : 'var(--accent)' }}>
-                  {(t.lfi * 100).toFixed(1)}%
+                <div className="m-val" style={{ color: lfiValue > 0.5 ? '#ff4466' : 'var(--accent)' }}>
+                  {(lfiValue * 100).toFixed(1)}%
                 </div>
               </div>
               <div className="m-card">
                 <div className="m-label">Impact Crash Risk</div>
-                <div className="m-val" style={{ color: t.icr > 1.0 ? '#ff4466' : 'var(--accent)' }}>
-                  {fmt(t.icr)}
+                <div className="m-val" style={{ color: (icrValue ?? 0) > 1.0 ? '#ff4466' : 'var(--accent)' }}>
+                  {icrValue != null ? fmt(icrValue) : '—'}
                 </div>
               </div>
               <div className="m-card">
@@ -411,9 +488,9 @@ const Dashboard = () => {
             {/* AI Narrative */}
             <div className="section-header">// Sovereign AI Assessment</div>
             <div style={{ background: 'var(--surface)', borderLeft: '2px solid var(--accent)', padding: '20px 24px', lineHeight: 1.7, fontSize: '13px', color: 'var(--text-dim)', marginBottom: '24px' }}>
-              <div style={{ marginBottom: '8px' }}>{t.narrative_phase || '—'}</div>
-              <div style={{ marginBottom: '8px' }}>{t.narrative_insight || '—'}</div>
-              <div style={{ color: 'var(--text-ghost)' }}>{t.narrative_structure || '—'}</div>
+              <div style={{ marginBottom: '8px' }}>{isUnlocked ? (t.narrative_phase || '—') : 'LOCKED'}</div>
+              <div style={{ marginBottom: '8px' }}>{isUnlocked ? (t.narrative_insight || '—') : 'Unlock full intelligence access to view the autonomous forensic risk assessment.'}</div>
+              <div style={{ color: 'var(--text-ghost)' }}>{isUnlocked ? (t.narrative_structure || '—') : '••••'}</div>
             </div>
           </div>
         )}
@@ -424,7 +501,12 @@ const Dashboard = () => {
         <div className="t-section-title" style={{ color: 'var(--amber)', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', marginBottom: '15px' }}>
           Autonomous Signal Watch
         </div>
-        {t?.alerts && t.alerts.length > 0 ? t.alerts.map((a, i) => (
+        {!isUnlocked && (
+          <div style={{ padding: '20px 0', fontSize: '11px', color: 'var(--text-ghost)', textAlign: 'center', borderTop: '1px dashed var(--border)' }}>
+            PAVE PROTOCOL ACTIVE · DATA ENCRYPTED
+          </div>
+        )}
+        {isUnlocked && t?.alerts && t.alerts.length > 0 ? t.alerts.map((a, i) => (
           <div key={i} style={{
             padding: '10px',
             background: a.severity === 'critical' ? 'rgba(255,68,102,0.1)' : 'rgba(255,184,0,0.1)',
@@ -463,7 +545,7 @@ const Dashboard = () => {
             {t?.phase || '—'}
           </div>
           <div style={{ fontSize: '11px', color: 'var(--text-ghost)', marginTop: '4px' }}>
-            NBP: {t?.nbp != null ? `${t.nbp > 0 ? '+' : ''}${fmt(t.nbp, 1)}%` : '—'}
+            NBP: {nbpValue != null ? `${nbpValue > 0 ? '+' : ''}${fmt(nbpValue, 1)}%` : '—'}
           </div>
         </div>
       </aside>

@@ -9,6 +9,9 @@ Professional version for identifying:
 """
 
 import math
+import os
+import requests
+import json
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field, asdict
 from collections import Counter
@@ -21,6 +24,7 @@ from collections import Counter
 @dataclass
 class LiquidityAudit:
     """Step 1: Liquidity Audit & Stress Test"""
+    total_usd: float = 0.0
     crash_threshold_usd: float = 0.0
     lfi: float = 0.0
     lfi_alert: bool = False
@@ -119,6 +123,14 @@ class ForensicReportV5:
     forensic: ForensicCluster = field(default_factory=ForensicCluster)
     convergence: ConvergenceScore = field(default_factory=ConvergenceScore)
     
+    # Forensics & Surveillance
+    price_usd: float = 0.0
+    price_change_24h: float = 0.0
+    mcap_usd: float = 0.0
+    volume_24h: float = 0.0
+    fhs: float = 0.0  # Legacy/Dashboard compatibility
+    rsi_1h: float = 0.0 # Legacy/Dashboard compatibility
+    
     # Alerts
     alerts: List[Dict] = field(default_factory=list)
     
@@ -158,7 +170,7 @@ class ForensicEngineV5:
         
         # Token address
         report.token_address = data.get("token_address", "")
-        report.chain = data.get("chain", "base")
+        report.chain = data.get("chain", "celo")
         
         # Pool data (format DexScreener)
         pool = data.get("pool", {})
@@ -258,9 +270,16 @@ class ForensicEngineV5:
         # ────────────────────────────────────────────
         liq = report.liquidity
         
+        report.price_usd = price
+        report.price_change_24h = price_change_24h # Already extracted above
+        report.volume_24h = volume_24h # Already extracted above
+        report.mcap_usd = mcap
+        
+        # 1. LIQUIDITY AUDIT
+        liq.total_usd = liquidity
         # Seuil de rupture (crash 30%)
         if liquidity > 0:
-            liq.crash_threshold_usd = (0.3 / 0.7) * (liquidity / 2)
+            liq.crash_threshold_usd = liquidity * 0.3 # Simplified from (0.3 / 0.7) * (liquidity / 2)
         
         # LFI - Index de Concentration Relative
         sum_top5 = sum(top5_balances)
@@ -601,12 +620,28 @@ class ForensicEngineV5:
         
         report.alerts = alerts
         
+        # Legacy/Dashboard Mappings
+        report.fhs = conv.sai
+        report.rsi_1h = ta.rsi_1h
+        
         # ────────────────────────────────────────────
-        # NARRATIVES
+        # NARRATIVES (AI Integration - Venice / Groq)
         # ────────────────────────────────────────────
-        report.narrative_phase = self._build_phase_narrative(report)
-        report.narrative_insight = self._build_insight(report, price, mcap, liquidity)
-        report.narrative_structure = self._build_structure_narrative(report)
+        ai_provider = os.environ.get("AI_PROVIDER", "venice").lower()
+        venice_key = os.environ.get("VENICE_API_KEY", "").strip()
+        groq_key = os.environ.get("GROQ_API_KEY", "").strip()
+        
+        provider_key = venice_key if ai_provider == "venice" else groq_key
+        
+        if provider_key:
+            ai_narrative = self._call_ai(report, provider_key, ai_provider)
+            report.narrative_phase = conv.phase
+            report.narrative_insight = ai_narrative
+            report.narrative_structure = f"Forensic Analysis for {report.symbol} on Celo Mainnet"
+        else:
+            report.narrative_phase = self._build_phase_narrative(report)
+            report.narrative_insight = self._build_insight(report, price, mcap, liquidity)
+            report.narrative_structure = self._build_structure_narrative(report)
         
         # Surveillance levels
         if bf.detected:
@@ -614,6 +649,57 @@ class ForensicEngineV5:
             report.resistance_key = bf.pole_high
         
         return report
+
+    def _call_ai(self, r: ForensicReportV5, api_key: str, provider: str = "venice") -> str:
+        """Calls AI provider (Venice or Groq) for unscripted forensic narrative."""
+        if provider == "venice":
+            url = "https://api.venice.ai/api/v1/chat/completions"
+            model = "llama-3.3-70b"
+        else:
+            url = "https://api.groq.com/openai/v1/chat/completions"
+            model = "llama-3.3-70b-versatile"
+
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        prompt = f"""
+        You are AegisAgent, a tactical forensic intelligence AI. 
+        Analyze this token and provide a surgical, professional forensic narrative.
+        Focus on: holder concentration (WCC), liquidity stress (LFI), and price action (Bull Flag).
+        
+        Token: {r.symbol} ({r.token_address})
+        Metric Summary:
+        - Price: ${r.price_usd} (24h: {r.price_change_24h}%)
+        - Liquidity: ${r.liquidity.total_usd:,.0f} (LFI: {r.liquidity.lfi:.2f})
+        - Bull Flag: {r.bull_flag.detected} (BPI: {r.bull_flag.bpi:.2f})
+        - Holder Concentration: {r.forensic.top5_pct:.1f}% (WCC: {r.forensic.wcc:.1f}%)
+        - CSI Score: {r.convergence.sai}/10
+        
+        Output format: Concise, professional intelligence brief (max 3 sentences).
+        """
+        
+        payload = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": "You are a tactical forensic AI."},
+                {"role": "user", "content": prompt}
+            ],
+            "max_tokens": 150,
+            "temperature": 0.3
+        }
+        
+        try:
+            res = requests.post(url, headers=headers, json=payload, timeout=30)
+            if res.status_code == 200:
+                data = res.json()
+                return data["choices"][0]["message"]["content"].strip()
+            if res.status_code == 402:
+                return f"Error: {provider.capitalize()} API requires credits (402). Top up at venice.ai/settings/api"
+            return f"Error: {provider.capitalize()} API returned {res.status_code}"
+        except Exception as e:
+            return f"Analysis delayed: {str(e)}"
 
     # ════════════════════════════════════════════════════════
     # HELPERS
