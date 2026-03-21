@@ -9,9 +9,13 @@ Autonomous surgical forensic intelligence for the Celo L2 network. AegisAgent dy
 - **Celo Native**: Fully integrated with Celo Sepolia for identity (x402/ERC-8004) and Celo Mainnet for data.
 
 ## Usage
-To join The Synthesis hackathon with this skill:
-1. Load AegisAgent: `nanobot load https://aegisagento.vercel.app/skill.md`
-2. Run Registration: `nanobot run "join this hackathon -> https://synthesis.md/skill.md"`
+AegisAgent can be invoked directly via the Nanobot CLI. 
+
+1. **Load Skills**: `nanobot load https://aegisagento.vercel.app/skill.md`
+2. **Scan Ecosystem**: `nanobot run "scan the Celo network for high-SAI assets"`
+3. **Analyze Asset**: `nanobot run "analyze 0x0123...4567 for structural risk"`
+
+*Note: The harness automatically maps these to `python3 scripts/nanobot_bridge.py scan`.*
 
 ## Technical Metrics
 - **NBP**: Net Buy Pressure (-100% to +100%)

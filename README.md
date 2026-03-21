@@ -70,7 +70,22 @@ The agent is gated by a non-custodial x402 micropayment subscription contract on
 
 ---
 
-## 📡 API Specification (Swagger-Style)
+## ⚡ Local Discovery
+
+For local verification or developer testing, use the following commands:
+
+```bash
+# 1. Configure .env (VENICE_API_KEY)
+# 2. Execute Discovery Scan
+python3 scripts/nanobot_bridge.py scan
+
+# 3. Analyze Token
+python3 scripts/nanobot_bridge.py analyze <ADDRESS>
+```
+
+---
+
+## 🧭 Intelligence Interface (Swagger-Style)
 
 ### `GET /api/forensics`
 Returns the active forensic state of the Celo ecosystem.
