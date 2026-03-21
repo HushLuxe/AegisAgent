@@ -13,12 +13,12 @@
   "techStack": {
     "runtime": "Python 3.11 / Next.js",
     "orchestration": "Vercel Serverless + Cron",
-    "llm": "LLaMA 3.3 (via Groq)",
+    "llm": "LLaMA 3.3 (via Venice.ai)",
     "storage": "Vercel KV (Redis)",
     "frontend": "React + Tailwind (Vercel)",
     "forensics": "Aegis Surgical Engine V5",
     "harness": "nanobot",
-    "model": "llama-3.3-70b-versatile"
+    "model": "llama-3.3-70b"
   },
   "capabilities": [
     "on-chain-forensics",

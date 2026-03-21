@@ -109,7 +109,7 @@ const Landing = () => {
               TOKEN<br/>DASHBOARD
             </h2>
             <p style={{ fontSize: '14px', color: 'var(--text-dim)', lineHeight: 1.7, marginBottom: '28px' }}>
-              Surface-level SAI scores are always public. Full forensic depth — 100+ computed metrics, LFI simulation, whale mapping, bull flag detection, and a Groq-powered AI narrative — unlocked with a single on-chain micropayment on Celo L2.
+              Surface-level SAI scores are always public. Full forensic depth — 100+ computed metrics, LFI simulation, whale mapping, bull flag detection, and a Sovereign-powered AI narrative — unlocked with a single on-chain micropayment on Celo L2.
             </p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '28px' }}>
               <span className="paywall-price" style={{ fontSize: '52px' }}>0.1</span>
@@ -123,7 +123,7 @@ const Landing = () => {
               GLOBAL<br/>SYNTHESIS
             </h2>
             <p style={{ fontSize: '14px', color: 'var(--text-dim)', lineHeight: 1.7, marginBottom: '28px' }}>
-              Every 60 minutes, AegisAgent autonomously ingests live on-chain data for all monitored Celo tokens and invokes a Groq LLM to generate a structured forensic narrative — phase classification, structural risk, and signal confidence — with no human input.
+              Every 60 minutes, AegisAgent autonomously ingests live on-chain data for all monitored Celo tokens and invokes Venice AI to generate a structured forensic narrative — phase classification, structural risk, and signal confidence — with no human input.
             </p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '28px' }}>
               <span className="paywall-price" style={{ fontSize: '52px', color: 'var(--amber)' }}>0.1</span>
@@ -135,7 +135,7 @@ const Landing = () => {
 
       <footer style={{ padding: '24px 64px', borderTop: '1px solid var(--border)', background: 'var(--surface)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px', color: 'var(--text-ghost)', fontFamily: "'JetBrains Mono', monospace" }}>
         <div>AegisAgent · <span style={{ color: 'var(--accent)' }}>SOVEREIGN FORENSIC INTELLIGENCE</span> · Celo L2</div>
-        <div>ForensicEngineV5 · Groq LLM · x402 Protocol</div>
+        <div>ForensicEngineV5 · Venice AI · x402 Protocol</div>
         <div>© 2026 · <span style={{ color: 'var(--accent)' }}>AUTONOMOUS · NON-CUSTODIAL</span></div>
       </footer>
     </>

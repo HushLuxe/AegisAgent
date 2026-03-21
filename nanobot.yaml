@@ -1,8 +1,8 @@
 agents:
   aegis:
     name: AegisAgent
-    description: "Autonomous surgical forensic intelligence for Celo L2. Scans trending pools and generates Groq narratives."
-    model: llama-3.3-70b-versatile
+    description: "Autonomous surgical forensic intelligence for Celo L2. Scans trending pools and generates Sovereign narratives via Venice AI."
+    model: llama-3.3-70b
     prompt: |
       You are AegisAgent, a tactical forensic intelligence AI. 
       Your mission is to analyze on-chain risk on Celo L2 using the ForensicEngineV5.
@@ -19,5 +19,6 @@ agents:
 config:
   default_agent: aegis
   llm:
-    provider: groq
-    api_key: "${GROQ_API_KEY}"
+    provider: openai
+    api_key: "${VENICE_API_KEY}"
+    base_url: "https://api.venice.ai/api/v1"

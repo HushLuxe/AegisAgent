@@ -45,7 +45,7 @@ const Dashboard = () => {
   const [wallet, setWallet] = useState(null);
   const [updatedAt, setUpdatedAt] = useState('');
   const [aiEnabled, setAiEnabled] = useState(false);
-  const [aiProvider, setAiProvider] = useState('groq');
+  const [aiProvider, setAiProvider] = useState('venice');
 
   // Fetch forensics from Vercel API on mount and every 2 minutes
   useEffect(() => {
@@ -260,18 +260,19 @@ const Dashboard = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '6px',
-            padding: '6px 10px',
+            padding: '6px 12px',
             borderRadius: '999px',
             border: '1px solid var(--border)',
             background: 'var(--surface)',
             fontSize: '10px',
+            fontWeight: 500,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: aiEnabled ? 'var(--accent)' : 'var(--text-ghost)'
+            color: aiEnabled ? (aiProvider === 'venice' ? '#FF3D00' : 'var(--accent)') : 'var(--text-ghost)'
           }}
-          title={aiEnabled ? `${aiProvider.toUpperCase()} analysis enabled` : 'AI analysis disabled'}
+          title={aiEnabled ? `${aiProvider.toUpperCase()} Sovereignty Active` : 'AI Analysis Passive'}
         >
-          <span style={{ opacity: 0.7 }}>{aiProvider.toUpperCase()}</span>
+          <span style={{ opacity: 0.7 }}>{aiProvider === 'venice' ? 'SOVEREIGN' : aiProvider.toUpperCase()}</span>
           <span style={{ fontWeight: 700 }}>{aiEnabled ? 'ON' : 'OFF'}</span>
         </div>
         <button 
@@ -352,7 +353,7 @@ const Dashboard = () => {
               <div className="pw-chip">Per-Token Forensic Intelligence · Celo L2</div>
               <div className="pw-icon" style={{ fontSize: '32px', marginBottom: '20px' }}>🔐</div>
               <h2>Intelligence Access</h2>
-              <p>Full forensic depth — 100+ computed metrics, LFI simulation, whale mapping, bull flag detection, and an autonomous Groq AI narrative — unlocked with a single on-chain micropayment.</p>
+              <p>Full forensic depth — 100+ computed metrics, LFI simulation, whale mapping, bull flag detection, and an autonomous Sovereign AI narrative — unlocked with a single on-chain micropayment.</p>
               <div className="paywall-price">0.1 CELO</div>
               <div className="paywall-price-sub">Celo L2 Sepolia · 24h Access · Non-Custodial</div>
               <div className="pw-status" style={{
