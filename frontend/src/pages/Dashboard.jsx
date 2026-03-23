@@ -144,29 +144,34 @@ const Dashboard = () => {
 
   const executeBailout = async (token) => {
     if (!wallet) return;
-    setBailoutStatus('Fetching autonomous Uniswap route...');
+    setBailoutStatus('🔍 Fetching Uniswap route via Trading API...');
     try {
       const res = await fetch(`/api/uniswap?token=${token.address}&wallet=${wallet}&amount=1000000000000000000`);
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-      
-      const params = data.quote?.methodParameters;
-      if (!params) throw new Error('No routing path found');
 
-      setBailoutStatus('Route calculated. Please sign in Wallet...');
+      // New schema: { swap: { to, data, value, chainId }, estimatedOutput }
+      const swapTx = data.swap;
+      if (!swapTx?.to || !swapTx?.data) throw new Error('No routing path found — insufficient liquidity?');
+
+      const estimatedUsdc = data.estimatedOutput
+        ? `~${(parseInt(data.estimatedOutput) / 1e6).toFixed(4)} USDC`
+        : '';
+
+      setBailoutStatus(`✅ Route found ${estimatedUsdc}. Signing in wallet...`);
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
       const tx = await signer.sendTransaction({
-        to: params.to,
-        data: params.calldata,
-        value: params.value
+        to: swapTx.to,
+        data: swapTx.data,
+        value: swapTx.value || '0x00'
       });
-      
-      setBailoutStatus(`✓ Swap Sent! TxID: ${tx.hash}`);
+
+      setBailoutStatus(`✓ Emergency Bailout Sent! Tx: ${tx.hash.slice(0, 18)}...`);
     } catch (e) {
       console.error(e);
-      setBailoutStatus(`Swap Failed: ${e.message}`);
+      setBailoutStatus(`❌ Swap Failed: ${e.message}`);
     }
   };
 
