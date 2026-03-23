@@ -254,27 +254,6 @@ const Dashboard = () => {
           REFRESH
         </button>
 
-        <div
-          className="ai-badge"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '6px 12px',
-            borderRadius: '999px',
-            border: '1px solid var(--border)',
-            background: 'var(--surface)',
-            fontSize: '10px',
-            fontWeight: 500,
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            color: aiEnabled ? '#FF3D00' : 'var(--text-ghost)'
-          }}
-          title={aiEnabled ? 'Venice Sovereignty Active' : 'AI Analysis Passive'}
-        >
-          <span style={{ opacity: 0.7 }}>VENICE AI</span>
-          <span style={{ fontWeight: 700 }}>{aiEnabled ? 'ON' : 'OFF'}</span>
-        </div>
         <button 
           onClick={connectWallet}
           className="btn-primary" 
