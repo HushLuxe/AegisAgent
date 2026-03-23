@@ -10,8 +10,12 @@ import re
 import subprocess
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
-GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL   = "llama-3.3-70b-versatile"
+VENICE_API_KEY = os.environ.get("VENICE_API_KEY", "")
+
+# LLM Config - Prefer Venice
+AI_URL   = "https://api.venice.ai/api/v1/chat/completions" if VENICE_API_KEY else "https://api.groq.com/openai/v1/chat/completions"
+AI_KEY   = VENICE_API_KEY if VENICE_API_KEY else GROQ_API_KEY
+AI_MODEL = "llama-3.3-70b" if VENICE_API_KEY else "llama-3.3-70b-versatile"
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 MOLTBOOK_API_KEY = os.environ.get("MOLTBOOK_API_KEY", "")
@@ -124,8 +128,8 @@ def main():
     current, _ = load_forensic_reports()
     if not current: return
     prompt = load_prompt()
-    payload = {"model": GROQ_MODEL, "messages": [{"role": "system", "content": prompt}, {"role": "user", "content": f"Analyze: {json.dumps(current, indent=None)}"}], "max_tokens": 4000}
-    r = requests.post(GROQ_URL, headers={"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}, json=payload, timeout=120)
+    payload = {"model": AI_MODEL, "messages": [{"role": "system", "content": prompt}, {"role": "user", "content": f"Analyze: {json.dumps(current, indent=None)}"}], "max_tokens": 4000}
+    r = requests.post(AI_URL, headers={"Authorization": f"Bearer {AI_KEY}", "Content-Type": "application/json"}, json=payload, timeout=120)
     analysis = r.json()["choices"][0]["message"]["content"] if r.status_code == 200 else None
     if analysis:
         h, tx = seal_report_onchain(analysis)

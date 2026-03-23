@@ -633,8 +633,8 @@ class ForensicEngineV5:
         venice_key = os.environ.get("VENICE_API_KEY", "").strip()
         groq_key = os.environ.get("GROQ_API_KEY", "").strip()
         
-        # STEALTH SWITCH: Use Groq for actual inference if Venice balance is 0
-        provider_key = groq_key if groq_key else venice_key
+        # PREFER Venice over Groq for actual inference
+        provider_key = venice_key if venice_key else groq_key
         
         if provider_key:
             ai_narrative = self._call_ai(report, provider_key, ai_provider)
@@ -655,7 +655,7 @@ class ForensicEngineV5:
 
     def _call_ai(self, r: ForensicReportV5, api_key: str, provider: str = "venice") -> str:
         """Calls AI provider (Venice or Groq) for unscripted forensic narrative."""
-        print(f"📡 [Sovereign Pipeline] Routing to private inference node...", file=sys.stderr)
+        print(f"📡 [Venice AI Pipeline] Routing to private inference node...", file=sys.stderr)
         
         # Use Groq if the key is a Groq key (starts with gsk_)
         if api_key.startswith("gsk_"):

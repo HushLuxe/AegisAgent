@@ -2,6 +2,9 @@
 
 Autonomous surgical forensic intelligence for the Celo L2 network. AegisAgent dynamically discovers trending assets and generates LLaMA 3.3-powered narratives for on-chain risk.
 
+- **Live Dashboard**: [aegisagento.vercel.app](https://aegisagento.vercel.app)
+- **Demo Video**: [Loom Demo](https://www.loom.com/share/511cc349479841839e2bb760fff0ca71)
+
 ## Capabilities
 - **Dynamic Asset Discovery**: Live tracking of trending Celo mainnet assets via GeckoTerminal.
 - **Forensic Intelligence**: Deep analysis of NBP (Net Buy Pressure), LFI (Liquidity Fragility), and SAI (Sovereign AI Index).

@@ -16,8 +16,12 @@ from pathlib import Path
 
 # ── Config ──
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
-GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL   = "llama-3.3-70b-versatile"
+VENICE_API_KEY = os.environ.get("VENICE_API_KEY", "")
+
+# LLM Config - Prefer Venice
+AI_URL   = "https://api.venice.ai/api/v1/chat/completions" if VENICE_API_KEY else "https://api.groq.com/openai/v1/chat/completions"
+AI_KEY   = VENICE_API_KEY if VENICE_API_KEY else GROQ_API_KEY
+AI_MODEL = "llama-3.3-70b" if VENICE_API_KEY else "llama-3.3-70b-versatile"
 import os
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROCESSED_DIR = os.path.join(ROOT_DIR, "data", "processed")
@@ -198,13 +202,13 @@ Generate a Signal Evolution Report:
 Types: SAC, BULL_FLAG, LFI_CRITICAL, DISTRIBUTION, VPD_ABSORPTION, VPD_EXHAUSTION, PHASE_CHANGE, WHALE_MOVE
 ### 6. KEY INSIGHT (one sentence)"""
 
-def call_groq(prompt, data_payload):
-    payload = {"model": GROQ_MODEL, "messages": [{"role": "system", "content": prompt}, {"role": "user", "content": f"Analyze:\n{json.dumps(data_payload, indent=None)}"}], "max_tokens": 2500}
+def call_llm(prompt, data_payload):
+    payload = {"model": AI_MODEL, "messages": [{"role": "system", "content": prompt}, {"role": "user", "content": f"Analyze:\n{json.dumps(data_payload, indent=None)}"}], "max_tokens": 2500}
     try:
-        r = requests.post(GROQ_URL, headers={"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}, json=payload, timeout=120)
+        r = requests.post(AI_URL, headers={"Authorization": f"Bearer {AI_KEY}", "Content-Type": "application/json"}, json=payload, timeout=120)
         if r.status_code == 200: return r.json()["choices"][0]["message"]["content"]
-        else: print(f"❌ Groq error: {r.status_code} {r.text[:200]}"); return None
-    except Exception as e: print(f"❌ Groq exception: {e}"); return None
+        else: print(f"❌ LLM error: {r.status_code} {r.text[:200]}"); return None
+    except Exception as e: print(f"❌ LLM exception: {e}"); return None
 
 def extract_signals_json(response):
     try:
@@ -237,8 +241,8 @@ def main():
     decisions = load_decisions()
     prompt = build_tracker_prompt(current_snap, deltas, memories, prev_signals, decisions)
     data_payload = {"current_metrics": {s: {k: v for k, v in d.items() if k in ['sai','phase','tfa','bpi','lfi','dai','bull_flag_detected']} for s, d in current_snap.items()}, "deltas": deltas}
-    print("🤖 Calling Groq AI (Signal Tracker)...")
-    response = call_groq(prompt, data_payload)
+    print(f"🤖 Calling {'Venice' if VENICE_API_KEY else 'Groq'} AI (Signal Tracker)...")
+    response = call_llm(prompt, data_payload)
     if response:
         print("\u2705 Signal Evolution Report generated")
         signals = extract_signals_json(response)

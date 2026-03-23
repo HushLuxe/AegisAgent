@@ -13,6 +13,13 @@ AegisAgent is a next-generation autonomous forensic agent designed for the Celo 
 
 ---
 
+### 🔗 Essential Links
+- **Live Dashboard**: [aegisagento.vercel.app](https://aegisagento.vercel.app)
+- **Demo Video**: [Loom Demo](https://www.loom.com/share/511cc349479841839e2bb760fff0ca71)
+- **GitHub**: [HushLuxe/AegisAgent](https://github.com/HushLuxe/AegisAgent)
+
+---
+
 ## 🔍 Problem
 
 The Celo ecosystem lacks real-time, autonomous on-chain risk intelligence. Traders, protocols, and investors have no systematic way to detect liquidity fragility, whale manipulation, or adversarial patterns in Celo-native tokens before they cause harm. Existing tools are reactive, manual, and do not model the full on-chain signal surface.

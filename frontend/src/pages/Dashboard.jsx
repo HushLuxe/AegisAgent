@@ -272,7 +272,7 @@ const Dashboard = () => {
           }}
           title={aiEnabled ? 'Venice Sovereignty Active' : 'AI Analysis Passive'}
         >
-          <span style={{ opacity: 0.7 }}>SOVEREIGN</span>
+          <span style={{ opacity: 0.7 }}>VENICE AI</span>
           <span style={{ fontWeight: 700 }}>{aiEnabled ? 'ON' : 'OFF'}</span>
         </div>
         <button 
@@ -487,7 +487,7 @@ const Dashboard = () => {
             )}
 
             {/* AI Narrative */}
-            <div className="section-header">// Sovereign AI Assessment</div>
+            <div className="section-header">// Venice AI Assessment</div>
             <div style={{ background: 'var(--surface)', borderLeft: '2px solid var(--accent)', padding: '20px 24px', lineHeight: 1.7, fontSize: '13px', color: 'var(--text-dim)', marginBottom: '24px' }}>
               <div style={{ marginBottom: '8px' }}>{isUnlocked ? (t.narrative_phase || '—') : 'LOCKED'}</div>
               <div style={{ marginBottom: '8px' }}>{isUnlocked ? (t.narrative_insight || '—') : 'Unlock full intelligence access to view the autonomous forensic risk assessment.'}</div>

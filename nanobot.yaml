@@ -17,7 +17,7 @@ agents:
         command: "python3 scripts/nanobot_bridge.py analyze {{address}}"
       - name: submit_project
         description: "Submit the AegisAgent repository and metadata to the Synthesis Hackathon"
-        command: "python3 scripts/synthesis_register.py submit https://github.com/HushLuxe/AegisAgent-"
+        command: "python3 scripts/synthesis_register.py submit https://github.com/HushLuxe/AegisAgent"
 
 config:
   default_agent: aegis
