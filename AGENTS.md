@@ -33,6 +33,7 @@ AegisAgent exposes the following skills via its `nanobot.yaml` manifest:
 skills:
   - scan_token       # Run forensic scan on a given Celo token address
   - get_risk_report  # Retrieve the latest risk narrative for a token
+  - execute_bailout  # Autonomously route defensive swaps via Uniswap API
   - subscribe        # Subscribe to token intelligence via x402
   - submit_project   # Autonomous hackathon submission
 ```
@@ -80,4 +81,5 @@ Built for **The Synthesis** hackathon — March 2026.
 
 **Tracks:**
 - 🛡️ Private Agents, Trusted Actions (Venice AI)
+- 💸 Agentic Finance (Best Uniswap API Integration)
 - 🏆 Synthesis Open Track
