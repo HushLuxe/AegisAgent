@@ -6,6 +6,8 @@
 [![Live Demo](https://img.shields.io/badge/Live-aegisagento.vercel.app-00E5FF?style=for-the-badge)](https://aegisagento.vercel.app)
 [![Celo L2](https://img.shields.io/badge/Network-Celo%20L2-FCFF52?style=for-the-badge)](https://explorer.celo.org/sepolia/)
 [![Sovereign AI](https://img.shields.io/badge/AI-Venice.ai-FF3D00?style=for-the-badge)](https://venice.ai)
+[![Status Network](https://img.shields.io/badge/Gasless-Status%20Network-6E3FF3?style=for-the-badge)](https://status.network)
+[![Uniswap](https://img.shields.io/badge/Finance-Uniswap%20API-FF007A?style=for-the-badge)](https://uniswap.org)
 
 ## 🚀 Overview
 
@@ -73,7 +75,10 @@ Gini-derived supply concentration ratio across the top 20 on-chain wallets. Elev
 AegisAgent operates a fully self-sustaining pipeline. Every cycle, it ingests live on-chain telemetry, computes 100+ proprietary forensic markers, and synthesizes tactical risk narratives via Venice AI.
 
 ### 💸 Agentic Finance (Uniswap Integration)
-AegisAgent features an **Autonomous Liquidation Protocol (ALP)**. When a monitored asset on Celo hits critical Liquidity Fragility (`LFI` > 50%), the agent autonomously interfaces with the **Uniswap Routing API** to pre-compute an optimal defensive swap route into USDC. The dashboard empowers the user to execute this agent-constructed transaction on-chain with a single click, proving end-to-end agentic transparency and real functional swaps.
+AegisAgent features an **Autonomous Liquidation Protocol (ALP)**. When a monitored asset on Celo hits critical Liquidity Fragility (`LFI` > 50%), the agent autonomously interfaces with the **Uniswap Trading API v1** (`/quote` + `/swap` on Celo chain 42220) to pre-compute an optimal defensive swap route into USDC. The dashboard empowers the user to execute this agent-constructed transaction on-chain with a single click, proving real functional swaps with a live Uniswap API key.
+
+### 📡 Status Network Telemetry (Gasless On-Chain Audit Trail)
+AegisAgent emits cryptographic **forensic audit beacons** to **Status Network** (fully gasless Ethereum L2, chain ID `1660990954`) on every scan cycle. Each beacon encodes the scan timestamp, token count, and SHA-256 fingerprint of the forensic report as `calldata` — creating a verifiable, immutable audit trail of all agent actions without any gas costs. The `api/status_network` endpoint handles beacon construction and broadcast.
 
 ### 💰 On-Chain Economic Autonomy
 The agent is gated by a non-custodial x402 micropayment subscription contract on Celo L2. Users pay 0.1 CELO for 24h of forensic access, demonstrating genuine agent-native economic sovereignty without centralized intervention.
@@ -140,13 +145,28 @@ cd frontend && npm install && npm run dev
 |---|---|
 | `VENICE_API_KEY` | Venice.ai LLM narrative generation (Privacy-focused) |
 | `GROQ_API_KEY` | Groq LLM fallback |
-| `UNISWAP_API_KEY` | Agentic Finance autonomous execution routing |
+| `UNISWAP_API_KEY` | Agentic Finance autonomous execution routing via Uniswap Trading API v1 |
 | `AI_PROVIDER` | Toggle between `venice` or `groq` |
 | `MORALIS_API_KEY` | On-chain holder analysis |
-| `PRIVATE_KEY` | Celo L2 contract operations |
+| `PRIVATE_KEY` | Celo L2 + Status Network beacon signing |
+| `OPERATOR_WALLET` | Agent wallet address (0xE32A943635107CA464a2c1328EFf34AE0bFa8247) |
 | `KV_REST_API_URL` | Upstash Redis persistence |
 | `KV_REST_API_TOKEN` | Upstash Redis auth |
 
 ---
 
-*Autonomous intelligence. Non-custodial. Built for Celo L2 (Chain ID: 11142220).*
+---
+
+## 🏆 Hackathon Tracks
+
+| Track | Sponsor | Implementation |
+|-------|---------|----------------|
+| 🛡️ Private Agents, Trusted Actions | Venice AI | LLaMA 3.3 70B sovereign inference via Venice.ai |
+| 💸 Agentic Finance | Uniswap | Trading API v1 `/quote`+`/swap` on Celo (chain 42220) |
+| 📡 Go Gasless on Status Network | Status Network | Forensic beacon txs on chain 1660990954, zero gas |
+| 🌐 Best Agent on Celo | Celo | Full Celo L2 native: x402 payments, Moralis data, on-chain sealing |
+| 🏆 Synthesis Open Track | Synthesis | — |
+
+---
+
+*Autonomous intelligence. Non-custodial. Built for Celo L2 + Status Network.*

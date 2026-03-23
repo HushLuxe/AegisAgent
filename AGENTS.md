@@ -11,6 +11,8 @@ AegisAgent autonomously monitors Celo-native tokens on-chain and generates sover
 - **Computes 100+ proprietary metrics** through `ForensicEngineV5` (whale clustering, liquidity fragility, volatility divergence, etc.)
 - **Generates structured forensic narratives** via Venice.ai (LLaMA 3.3 70B) — sovereign, private, uncensorable
 - **Seals findings on-chain** as an immutable Celo transaction hash
+- **Emits gasless telemetry beacons** to Status Network (chain 1660990954) — every scan cycle is traceable on-chain at zero cost
+- **Executes autonomous defensive swaps** via Uniswap Trading API v1 when critical risk is detected
 - **Monetizes access** via non-custodial x402 micropayment subscriptions (0.1 CELO / 24h)
 
 ## Agent Interface
@@ -21,6 +23,9 @@ AegisAgent autonomously monitors Celo-native tokens on-chain and generates sover
 |----------|--------|-------------|
 | `/api/forensics` | `GET` | Latest forensic scan result (public preview) |
 | `/api/forensics?token=<addr>` | `GET` | Token-specific forensic analysis |
+| `/api/uniswap` | `GET` | Autonomous Uniswap swap route (Celo → USDC) |
+| `/api/status_network` | `GET` | Status Network connection info + current block |
+| `/api/status_network` | `POST` | Emit forensic beacon tx to Status Network (gasless) |
 | `/api/subscribe` | `POST` | Initiate x402 CELO subscription |
 | `/api/status` | `GET` | Agent health & last scan timestamp |
 | `/api/scan` | `POST` | Trigger manual forensic scan (admin) |
@@ -31,11 +36,12 @@ AegisAgent exposes the following skills via its `nanobot.yaml` manifest:
 
 ```yaml
 skills:
-  - scan_token       # Run forensic scan on a given Celo token address
-  - get_risk_report  # Retrieve the latest risk narrative for a token
-  - execute_bailout  # Autonomously route defensive swaps via Uniswap API
-  - subscribe        # Subscribe to token intelligence via x402
-  - submit_project   # Autonomous hackathon submission
+  - scan_token         # Run forensic scan on a given Celo token address
+  - get_risk_report    # Retrieve the latest risk narrative for a token
+  - execute_bailout    # Autonomously route defensive swaps via Uniswap API
+  - emit_beacon        # Emit gasless forensic telemetry to Status Network
+  - subscribe          # Subscribe to token intelligence via x402
+  - submit_project     # Autonomous hackathon submission
 ```
 
 ### Invocation
@@ -61,7 +67,9 @@ curl https://aegisagento.vercel.app/api/forensics
 | Forensics | ForensicEngineV5 (custom) |
 | Agent Harness | Nanobot v0.1.4 |
 | Payments | x402 (non-custodial CELO) |
-| Chain | Celo L2 (Mainnet + Sepolia) |
+| Agentic Finance | Uniswap Trading API v1 (Celo, chain 42220) |
+| Telemetry | Status Network Testnet (chain 1660990954, gasless) |
+| Chains | Celo L2 Mainnet + Status Network Testnet |
 
 ## On-Chain Identity
 
@@ -82,4 +90,6 @@ Built for **The Synthesis** hackathon — March 2026.
 **Tracks:**
 - 🛡️ Private Agents, Trusted Actions (Venice AI)
 - 💸 Agentic Finance (Best Uniswap API Integration)
+- 📡 Go Gasless on Status Network
+- 🌐 Best Agent on Celo
 - 🏆 Synthesis Open Track
