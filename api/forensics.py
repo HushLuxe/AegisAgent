@@ -379,6 +379,7 @@ def flatten_report(address, report_dict):
         "narrative_structure": report_dict.get("narrative_structure", ""),
         "support_key": report_dict.get("support_key", 0),
         "resistance_key": report_dict.get("resistance_key", 0),
+        "bailout_recommended": report_dict.get("bailout_recommended", False),
 
         "alerts": report_dict.get("alerts", []),
     }

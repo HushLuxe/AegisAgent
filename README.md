@@ -72,6 +72,9 @@ Gini-derived supply concentration ratio across the top 20 on-chain wallets. Elev
 ### 🔥 Autonomous Intelligence Loop
 AegisAgent operates a fully self-sustaining pipeline. Every cycle, it ingests live on-chain telemetry, computes 100+ proprietary forensic markers, and synthesizes tactical risk narratives via Venice AI.
 
+### 💸 Agentic Finance (Uniswap Integration)
+AegisAgent features an **Autonomous Liquidation Protocol (ALP)**. When a monitored asset on Celo hits critical Liquidity Fragility (`LFI` > 50%), the agent autonomously interfaces with the **Uniswap Routing API** to pre-compute an optimal defensive swap route into USDC. The dashboard empowers the user to execute this agent-constructed transaction on-chain with a single click, proving end-to-end agentic transparency and real functional swaps.
+
 ### 💰 On-Chain Economic Autonomy
 The agent is gated by a non-custodial x402 micropayment subscription contract on Celo L2. Users pay 0.1 CELO for 24h of forensic access, demonstrating genuine agent-native economic sovereignty without centralized intervention.
 
@@ -137,6 +140,7 @@ cd frontend && npm install && npm run dev
 |---|---|
 | `VENICE_API_KEY` | Venice.ai LLM narrative generation (Privacy-focused) |
 | `GROQ_API_KEY` | Groq LLM fallback |
+| `UNISWAP_API_KEY` | Agentic Finance autonomous execution routing |
 | `AI_PROVIDER` | Toggle between `venice` or `groq` |
 | `MORALIS_API_KEY` | On-chain holder analysis |
 | `PRIVATE_KEY` | Celo L2 contract operations |

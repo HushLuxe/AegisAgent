@@ -143,6 +143,7 @@ class ForensicReportV5:
     # Surveillance
     support_key: float = 0.0
     resistance_key: float = 0.0
+    bailout_recommended: bool = False
     
     # Raw metrics for debug
     raw_metrics: Dict = field(default_factory=dict)
@@ -650,6 +651,15 @@ class ForensicEngineV5:
         if bf.detected:
             report.support_key = bf.pole_low
             report.resistance_key = bf.pole_high
+            
+        # Autonomous Bailout Trigger
+        if report.liquidity.lfi > 0.50 or (conv.phase == "DISTRIBUTION" and report.fhs < 5.0):
+            report.bailout_recommended = True
+            report.alerts.append({
+                "severity": "critical",
+                "code": "AUTONOMOUS_BAILOUT",
+                "message": "🚨 Critical risk. Agent pre-computed Uniswap bailout."
+            })
         
         return report
 

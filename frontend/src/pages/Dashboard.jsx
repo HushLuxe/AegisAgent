@@ -140,6 +140,35 @@ const Dashboard = () => {
   };
 
   const [isLoading, setIsLoading] = useState(false);
+  const [bailoutStatus, setBailoutStatus] = useState('');
+
+  const executeBailout = async (token) => {
+    if (!wallet) return;
+    setBailoutStatus('Fetching autonomous Uniswap route...');
+    try {
+      const res = await fetch(`/api/uniswap?token=${token.address}&wallet=${wallet}&amount=1000000000000000000`);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      
+      const params = data.quote?.methodParameters;
+      if (!params) throw new Error('No routing path found');
+
+      setBailoutStatus('Route calculated. Please sign in Wallet...');
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const tx = await signer.sendTransaction({
+        to: params.to,
+        data: params.calldata,
+        value: params.value
+      });
+      
+      setBailoutStatus(`✓ Swap Sent! TxID: ${tx.hash}`);
+    } catch (e) {
+      console.error(e);
+      setBailoutStatus(`Swap Failed: ${e.message}`);
+    }
+  };
 
   const connectWallet = async () => {
     console.log("🛠️ Attempting to connect wallet...");
@@ -363,6 +392,17 @@ const Dashboard = () => {
                 <div className="addr-pill" title={t.address}>
                   {t.address ? `${t.address.slice(0, 6)}…${t.address.slice(-4)}` : 'Celo'}
                 </div>
+                {t.bailout_recommended && isUnlocked && (
+                  <div style={{ marginTop: '12px' }}>
+                    <button 
+                      onClick={() => executeBailout(t)} 
+                      style={{ background: '#ff4466', color: '#fff', padding: '8px 16px', borderRadius: '4px', fontWeight: 'bold', fontSize: '11px', border: 'none', cursor: 'pointer', letterSpacing: '0.5px' }}
+                    >
+                      🚨 EXECUTE AUTONOMOUS BAILOUT
+                    </button>
+                    {bailoutStatus && <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '8px' }}>{bailoutStatus}</div>}
+                  </div>
+                )}
               </div>
               <div className="fhs-radar">
                 <div style={{ fontSize: '10px', color: 'var(--text-ghost)', marginBottom: '4px' }}>FHS</div>

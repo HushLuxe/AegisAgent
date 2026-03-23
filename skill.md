@@ -7,6 +7,7 @@ Autonomous surgical forensic intelligence for the Celo L2 network. AegisAgent dy
 
 ## Capabilities
 - **Dynamic Asset Discovery**: Live tracking of trending Celo mainnet assets via GeckoTerminal.
+- **Agentic Finance**: Autonomous Liquidation Protocol hitting the official Uniswap Routing API to execute defensive swaps into stablecoins.
 - **Forensic Intelligence**: Deep analysis of NBP (Net Buy Pressure), LFI (Liquidity Fragility), and SAI (Sovereign AI Index).
 - **AI Narratives**: Venice AI-powered unscripted forensic briefs for any discovered token, ensuring sovereign privacy.
 - **Celo Native**: Fully integrated with Celo Sepolia for identity (x402/ERC-8004) and Celo Mainnet for data.
